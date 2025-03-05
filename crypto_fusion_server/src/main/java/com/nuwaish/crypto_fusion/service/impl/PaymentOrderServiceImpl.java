@@ -43,6 +43,7 @@ public class PaymentOrderServiceImpl implements PaymentOrderService {
         paymentOrder.setUser(user);
         paymentOrder.setAmount(amount);
         paymentOrder.setPaymentMethod(paymentMethod);
+        paymentOrder.setStatus(PAYMENT_ORDER_STATUS.PENDING);
         return paymentOrderRepository.save(paymentOrder);
     }
 
@@ -55,11 +56,16 @@ public class PaymentOrderServiceImpl implements PaymentOrderService {
     @Override
     public boolean proceedPaymentOrder(PaymentOrder paymentOrder, String paymentOrderId) throws RazorpayException {
 
+        if (paymentOrder.getStatus() == null) {
+            paymentOrder.setStatus(PAYMENT_ORDER_STATUS.PENDING);
+        }
         if (paymentOrder.getStatus().equals(PAYMENT_ORDER_STATUS.PENDING)) {
+
             if (paymentOrder.getPaymentMethod().equals(PAYMENT_METHOD.RAZORPAY)) {
+
                 RazorpayClient razorpayClient = new RazorpayClient(razorpayApiKey, razorpaySecretKey);
                 Payment payment = razorpayClient.payments.fetch(paymentOrderId);
-
+                System.out.println("Payment details: " + payment);
                 Integer amount = payment.get("amount");
                 String status = payment.get("status");
 
@@ -82,7 +88,7 @@ public class PaymentOrderServiceImpl implements PaymentOrderService {
         return false;
     }
 
-    private static @NotNull JSONObject getPaymentLinkRequestJsonObject(User user, Long amount) {
+    private static @NotNull JSONObject getPaymentLinkRequestJsonObject(User user, Long amount, Long orderId) {
         JSONObject paymentLinkRequest = new JSONObject();
         paymentLinkRequest.put("amount", amount);
         paymentLinkRequest.put("currency", "INR");
@@ -104,20 +110,20 @@ public class PaymentOrderServiceImpl implements PaymentOrderService {
         paymentLinkRequest.put("reminder_enable", true);
 
         // set the callback URL and method
-        paymentLinkRequest.put("callback_url", "http://localhost:5173/wallet");
+        paymentLinkRequest.put("callback_url", "http://localhost:5173/wallet?order_id="+orderId);
         paymentLinkRequest.put("callback_method", "get");
         return paymentLinkRequest;
     }
 
     @Override
-    public PaymentResponse createRazorpayPaymentLink(User user, Long amount) {
+    public PaymentResponse createRazorpayPaymentLink(User user, Long amount, Long orderId) {
 
         try {
             // Instantiate a razorpay client with your key ID and Secret
             RazorpayClient razorpayClient = new RazorpayClient(razorpayApiKey, razorpaySecretKey);
 
             // Create a JSON object with the payment link request parameters
-            JSONObject paymentLinkRequest = getPaymentLinkRequestJsonObject(user, amount*100);
+            JSONObject paymentLinkRequest = getPaymentLinkRequestJsonObject(user, amount, orderId);
 
             // create the payment link using the payment.create() method
             PaymentLink paymentLink = razorpayClient.paymentLink.create(paymentLinkRequest);
@@ -140,7 +146,7 @@ public class PaymentOrderServiceImpl implements PaymentOrderService {
     public PaymentResponse createStripePaymentLink(User user, Long amount, Long orderId) throws StripeException {
 
         Stripe.apiKey = stripeSecretKey;
-
+        System.out.println("Stripe param amount" + amount);
         SessionCreateParams params = SessionCreateParams.builder()
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setMode(SessionCreateParams.Mode.PAYMENT)

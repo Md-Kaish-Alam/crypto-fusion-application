@@ -43,6 +43,16 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/api/users/{userId}")
+    public ResponseEntity<ApiResponse<User>> getUserById(@RequestHeader("Authorization") String jwt,
+                                                         @PathVariable Long userId) throws Exception {
+
+        User user = userService.findUserById(userId);
+
+        ApiResponse<User> response = new ApiResponse<>(user, HttpStatus.OK.value());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping("/api/users/verification/{verificationType}/send-otp")
     public ResponseEntity<ApiResponse<String>> sendVerificationOtp(
             @RequestHeader("Authorization") String jwt,

@@ -60,8 +60,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updatePassword(User user, String newPassword) {
+    public void updatePassword(User user, String newPassword) {
         user.setPassword(newPassword);
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 }

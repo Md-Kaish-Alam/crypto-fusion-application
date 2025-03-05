@@ -1,11 +1,14 @@
 package com.nuwaish.crypto_fusion.controller;
 
+import com.nuwaish.crypto_fusion.domain.WALLET_TRANSACTION_TYPE;
 import com.nuwaish.crypto_fusion.modal.User;
 import com.nuwaish.crypto_fusion.modal.Wallet;
+import com.nuwaish.crypto_fusion.modal.WalletTransaction;
 import com.nuwaish.crypto_fusion.modal.Withdrawal;
 import com.nuwaish.crypto_fusion.response.ApiResponse;
 import com.nuwaish.crypto_fusion.service.UserService;
 import com.nuwaish.crypto_fusion.service.WalletService;
+import com.nuwaish.crypto_fusion.service.WalletTransactionService;
 import com.nuwaish.crypto_fusion.service.WithdrawalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,8 +29,8 @@ public class WithdrawalController {
     @Autowired
     private WalletService walletService;
 
-//    @Autowired
-//    private WalletTransactionService walletTransactionService;
+    @Autowired
+    private WalletTransactionService walletTransactionService;
 
     @PostMapping("/api/withdrawal/{amount}")
     public ResponseEntity<ApiResponse<Withdrawal>> withdrawalRequest(
@@ -43,6 +46,12 @@ public class WithdrawalController {
         walletService.addBalanceToWallet(userWallet, -withdrawal.getAmount());
 
         // Wallet Transaction
+        WalletTransaction walletTransaction = walletTransactionService.createTransaction(
+                userWallet,
+                WALLET_TRANSACTION_TYPE.WITHDRAWAL,null,
+                "bank account withdrawal",
+                withdrawal.getAmount()
+        );
 
         ApiResponse<Withdrawal> response = new ApiResponse<>();
         response.setData(withdrawal);

@@ -9,6 +9,7 @@ import com.nuwaish.crypto_fusion.response.AuthResponse;
 import com.nuwaish.crypto_fusion.service.CustomUserDetailsService;
 import com.nuwaish.crypto_fusion.service.EmailService;
 import com.nuwaish.crypto_fusion.service.TwoFactorOTPService;
+import com.nuwaish.crypto_fusion.service.WatchListService;
 import com.nuwaish.crypto_fusion.utils.OTPUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,9 @@ public class AuthController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private WatchListService watchListService;
+
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<AuthResponse>> registerUser(@RequestBody User user) {
         try {
@@ -61,6 +65,8 @@ public class AuthController {
             newUser.setFullName(user.getFullName());
             newUser.setPassword(user.getPassword());
             User savedUser = userRepository.save(newUser);
+
+            watchListService.createWatchList(savedUser);
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     user.getEmail(),

@@ -23,7 +23,8 @@ public class CoinController {
     private ObjectMapper objectMapper;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Coin>>> getCoinsList(@RequestParam("page") int page) throws Exception {
+    public ResponseEntity<ApiResponse<List<Coin>>> getCoinsList(
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page) throws Exception {
         List<Coin> coins = coinService.getCoinsList(page);
 
         ApiResponse<List<Coin>> response = new ApiResponse<>();
@@ -94,8 +95,8 @@ public class CoinController {
     @GetMapping("/details/{coinId}")
     public ResponseEntity<ApiResponse<JsonNode>> getCoinDetails(@PathVariable String coinId) throws Exception {
 
-        String coins = coinService.getCoinDetails(coinId);
-        JsonNode jsonNode = objectMapper.readTree(coins);
+        String coin = coinService.getCoinDetails(coinId);
+        JsonNode jsonNode = objectMapper.readTree(coin);
 
         ApiResponse<JsonNode> response = new ApiResponse<>();
         response.setData(jsonNode);
@@ -106,12 +107,13 @@ public class CoinController {
     }
 
     @GetMapping("/{coinId}")
-    public ResponseEntity<ApiResponse<Coin>> getCoinById(@PathVariable String coinId) throws Exception {
+    public ResponseEntity<ApiResponse<JsonNode>> getCoinById(@PathVariable String coinId) throws Exception {
 
-        Coin coin = coinService.findCoinById(coinId);
+        String coin = coinService.getCoinDetails(coinId);
+        JsonNode jsonNode = objectMapper.readTree(coin);
 
-        ApiResponse<Coin> response = new ApiResponse<>();
-        response.setData(coin);
+        ApiResponse<JsonNode> response = new ApiResponse<>();
+        response.setData(jsonNode);
         response.setMessage("Coin fetched Successfully!");
         response.setStatusCode(HttpStatus.OK.value());
 
