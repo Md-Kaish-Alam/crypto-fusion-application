@@ -31,3 +31,50 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore application.properties and application.yml
+application.properties
+application.yml
+
+# Ignore IDE specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+
+# Ignore build directories
+target/
+build/
+out/
+bin/
+
+# Ignore log files
+*.log
+logs/
+
+# Ignore dependency directories (if applicable)
+**/node_modules/
+**/bower_components/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore local env files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Ignore Gradle files (if using Gradle)
+.gradle/
+!gradle-wrapper.jar
+
+# Ignore Maven files (if using Maven)
+.mvn/
+mvnw
+mvnw.cmd
