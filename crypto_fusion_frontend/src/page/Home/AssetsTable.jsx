@@ -119,90 +119,13 @@ const coins = [
     total_price_in_usd: 0.245644,
     volume: 830872218,
   },
-  {
-    id: "staked-ether",
-    name: "Lido Staked Ether",
-    symbol: "steth",
-    image:
-      "https://coin-images.coingecko.com/coins/images/13442/large/steth_logo.png?1696513206",
-    market_cap: 20745155874,
-    price_change_percentage_24h: 1.87375,
-    total_price_in_usd: 2221.21,
-    volume: 41316236,
-  },
-  {
-    id: "pi-network",
-    name: "Pi Network",
-    symbol: "pi",
-    image:
-      "https://coin-images.coingecko.com/coins/images/54342/large/pi_network.jpg?1739347576",
-    market_cap: 11911342920,
-    price_change_percentage_24h: -8.50054,
-    total_price_in_usd: 1.65,
-    volume: 299705463,
-  },
-  {
-    id: "wrapped-bitcoin",
-    name: "Wrapped Bitcoin",
-    symbol: "wbtc",
-    image:
-      "https://coin-images.coingecko.com/coins/images/7598/large/wrapped_bitcoin_wbtc.png?1696507857",
-    market_cap: 11113227013,
-    price_change_percentage_24h: -2.10619,
-    total_price_in_usd: 86120,
-    volume: 259548007,
-  },
-  {
-    id: "chainlink",
-    name: "Chainlink",
-    symbol: "link",
-    image:
-      "https://coin-images.coingecko.com/coins/images/877/large/chainlink-new-logo.png?1696502009",
-    market_cap: 9892677631,
-    price_change_percentage_24h: -7.01515,
-    total_price_in_usd: 15.51,
-    volume: 659535106,
-  },
-  {
-    id: "hedera-hashgraph",
-    name: "Hedera",
-    symbol: "hbar",
-    image:
-      "https://coin-images.coingecko.com/coins/images/3688/large/hbar.png?1696504364",
-    market_cap: 9631132953,
-    price_change_percentage_24h: -4.78142,
-    total_price_in_usd: 0.228241,
-    volume: 315291302,
-  },
-  {
-    id: "wrapped-steth",
-    name: "Wrapped stETH",
-    symbol: "wsteth",
-    image:
-      "https://coin-images.coingecko.com/coins/images/18834/large/wstETH.png?1696518295",
-    market_cap: 9193694522,
-    price_change_percentage_24h: 1.22481,
-    total_price_in_usd: 2645.96,
-    volume: 27821889,
-  },
-  {
-    id: "leo-token",
-    name: "LEO Token",
-    symbol: "leo",
-    image:
-      "https://coin-images.coingecko.com/coins/images/8418/large/leo-token.png?1696508607",
-    market_cap: 9112511080,
-    price_change_percentage_24h: -0.53719,
-    total_price_in_usd: 9.87,
-    volume: 2200392,
-  },
 ];
 
 
 const AssetsTable = () => {
   return (
-    <Table>
-      <TableHeader>
+    <Table className="border border-secondary">
+      <TableHeader className="bg-secondary">
         <TableRow className="uppercase">
           <TableHead className="w-[100px]">coin</TableHead>
           <TableHead>symbol</TableHead>

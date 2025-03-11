@@ -39,9 +39,9 @@ const Home = () => {
 
   return (
     <div className="relative">
-      <div className="lg:flex">
+      <div className="lg:flex h-[100vh]">
         {/* left panel */}
-        <div className="lg:w-[50%] lg:border-r px-2">
+        <div className="lg:w-[50%] lg:border-r px-2 overflow-y-auto max-h-[100vh] scroll-container">
           <div className="p-3 flex items-center gap-4">
             <Button
               variant={category == "all" ? "default" : "outline"}
@@ -76,7 +76,7 @@ const Home = () => {
         </div>
 
         {/* right panel */}
-        <div className="hidden lg:block lg:w-[50%] p-5">
+        <div className="hidden lg:block lg:w-[50%] p-5 fixed right-0 top-16 h-[100vh] overflow-hidden">
           <StockChart />
 
           {/* Coin details */}
@@ -153,7 +153,7 @@ const Home = () => {
                   )}
                 </div>
               ))}
-              
+
               {/* Typing Indicator */}
               {isTyping && (
                 <div className="flex items-center space-x-2 mb-2">
