@@ -1,14 +1,11 @@
 import {
-  Copy,
   Upload,
   Shuffle,
   Wallet2,
   Download,
   DollarSign,
   RefreshCcw,
-  CheckCheck,
 } from "lucide-react";
-import { useState } from "react";
 
 import {
   Dialog,
@@ -24,6 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AddMoneyForm from "./AddMoneyForm";
 import TransferForm from "./TransferForm";
 import WithdrawalForm from "./WithdrawalForm";
+import { CopyButton } from "@/components/CopyButton";
 
 const transaction_history = [
   {
@@ -69,19 +67,6 @@ const transaction_history = [
 ];
 
 const Wallet = () => {
-  const [isCopied, setIsCopied] = useState(false);
-
-  const onCopy = (value) => {
-    if (!value) return;
-
-    setIsCopied(true);
-    navigator.clipboard.writeText(value);
-    setTimeout(() => {
-      setIsCopied(false);
-    }, 1000);
-  };
-
-  const IdCopyIcon = isCopied ? CheckCheck : Copy;
   return (
     <div className="flex flex-col items-center">
       <div className="pt-10 w-[full] lg:w-[60%]">
@@ -94,14 +79,7 @@ const Wallet = () => {
                   <CardTitle className="text-2xl">My Wallet</CardTitle>
                   <div className="flex items-center gap-2 mt-1">
                     <p className="text-muted-foreground text-sm">#AA56DH</p>
-                    <Button
-                      variant="ghost"
-                      className="h-8 w-8"
-                      disabled={isCopied}
-                      onClick={() => onCopy("#AA56DH")}
-                    >
-                      <IdCopyIcon className="h-4 w-4" />
-                    </Button>
+                    <CopyButton value="#AA56DH" />
                   </div>
                 </div>
               </div>
