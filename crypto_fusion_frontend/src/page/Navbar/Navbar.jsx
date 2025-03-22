@@ -61,7 +61,7 @@ const Navbar = () => {
         </div>
       </div>
       <div>
-        <Avatar className="cursor-pointer">
+        <Avatar className="cursor-pointer" onClick={() => navigate("/profile")}>
           <AvatarFallback>KA</AvatarFallback>
         </Avatar>
       </div>
