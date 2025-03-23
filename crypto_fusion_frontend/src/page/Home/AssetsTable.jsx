@@ -1,4 +1,5 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useNavigate } from "react-router-dom";
+
 import {
   Table,
   TableBody,
@@ -7,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const coins = [
   {
@@ -121,8 +123,8 @@ const coins = [
   },
 ];
 
-
 const AssetsTable = () => {
+  const navigate = useNavigate();
   return (
     <Table className="border border-secondary">
       <TableHeader className="bg-secondary">
@@ -137,7 +139,11 @@ const AssetsTable = () => {
       </TableHeader>
       <TableBody>
         {coins.map((coin) => (
-          <TableRow key={coin.id}>
+          <TableRow
+            key={coin.id}
+            className="cursor-pointer"
+            onClick={() => navigate(`/market/${coin.id}`)}
+          >
             <TableCell className="font-medium flex items-center gap-1">
               <Avatar className="-z-50 w-8 h-8">
                 <AvatarImage src={coin.image} />

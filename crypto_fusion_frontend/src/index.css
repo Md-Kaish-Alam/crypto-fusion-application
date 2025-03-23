@@ -105,3 +105,16 @@
 .scroll-container {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
+
+/* For modern browsers */
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield;
+}
+
+/* For WebKit browsers (Chrome, Safari, Edge) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
