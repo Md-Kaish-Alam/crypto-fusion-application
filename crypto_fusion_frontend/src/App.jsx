@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 
 import Auth from "@/page/Auth/Auth";
 import Home from "@/page/Home/Home";
@@ -32,12 +32,14 @@ const App = () => {
             <Route path="/withdrawal" element={<Withdrawal />} />
             <Route path="/market/:id" element={<StockDetails />} />
             <Route path="/payment-details" element={<PaymentDetails />} />
-
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </>
       ) : (
-        <Auth />
+        <Routes>
+          <Route path="*" element={<Navigate to="/auth" />} />
+          <Route path="/auth" element={<Auth />} />
+        </Routes>
       )}
     </>
   );
