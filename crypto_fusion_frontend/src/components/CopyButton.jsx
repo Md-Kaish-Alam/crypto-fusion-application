@@ -7,14 +7,19 @@ import { Button } from "./ui/button";
 export const CopyButton = ({ value }) => {
   const [isCopied, setIsCopied] = useState(false);
 
-  const onCopy = () => {
-    if (!value) return;
+  const onCopy = async () => {
+    if (!value || isCopied) return;
 
-    setIsCopied(true);
-    navigator.clipboard.writeText(value);
-    setTimeout(() => {
-      setIsCopied(false);
-    }, 1000);
+    try {
+      await navigator.clipboard.writeText(value);
+      setIsCopied(true);
+
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Failed to copy text:", error);
+    }
   };
 
   const Icon = isCopied ? CheckCheck : Copy;
@@ -25,6 +30,7 @@ export const CopyButton = ({ value }) => {
       disabled={!value || isCopied}
       variant="ghost"
       size="sm"
+      aria-label={isCopied ? "Copied!" : "Copy to clipboard"}
     >
       <Icon className="h-4 w-4" />
     </Button>

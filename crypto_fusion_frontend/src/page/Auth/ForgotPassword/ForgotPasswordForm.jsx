@@ -25,10 +25,10 @@ const ForgotPasswordForm = () => {
 
   return (
     <div>
-      <h1 className="text-xl text-center font-bold">
-        Forgot Password
-      </h1>
-      <p className="text-sm font-semibold text-center text-muted-foreground mb-6">Please verify your email address</p>
+      <h1 className="text-xl text-center font-bold">Forgot Password</h1>
+      <p className="text-sm font-semibold text-center text-muted-foreground mb-6">
+        Please verify your email address
+      </p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
@@ -38,7 +38,7 @@ const ForgotPasswordForm = () => {
               <FormItem>
                 <FormControl>
                   <Input
-                    className="text-white font-semibold placeholder:text-white border-white py-5 mb-6"
+                    className="text-white font-semibold border-white py-5 mb-6"
                     placeholder="example123@gmail.com"
                     {...field}
                   />

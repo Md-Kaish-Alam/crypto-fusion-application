@@ -40,7 +40,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormControl>
                   <Input
-                    className="text-white font-semibold placeholder:text-white border-white py-5"
+                    className="text-white font-semibold border-white py-5"
                     placeholder="Full Name"
                     {...field}
                   />
@@ -56,7 +56,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormControl>
                   <Input
-                    className="text-white font-semibold placeholder:text-white border-white py-5"
+                    className="text-white font-semibold border-white py-5"
                     placeholder="example123@gmail.com"
                     {...field}
                   />
@@ -72,7 +72,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormControl>
                   <Input
-                    className="text-white font-semibold placeholder:text-white border-white py-5"
+                    className="text-white font-semibold border-white py-5"
                     placeholder="Password"
                     type="password"
                     {...field}
@@ -89,7 +89,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormControl>
                   <Input
-                    className="text-white font-semibold placeholder:text-white border-white py-5"
+                    className="text-white font-semibold border-white py-5"
                     placeholder="Confirm Password"
                     {...field}
                   />
@@ -105,6 +105,6 @@ const SignUpForm = () => {
       </Form>
     </div>
   );
-}
+};
 
-export default SignUpForm
+export default SignUpForm;

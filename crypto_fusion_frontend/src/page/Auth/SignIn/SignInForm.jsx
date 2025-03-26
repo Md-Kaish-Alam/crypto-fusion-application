@@ -41,7 +41,7 @@ const SignInForm = () => {
               <FormItem>
                 <FormControl>
                   <Input
-                    className="text-white font-semibold placeholder:text-white border-white py-5 mb-6"
+                    className="text-white font-semibold border-white py-5 mb-6"
                     placeholder="example123@gmail.com"
                     {...field}
                   />
@@ -57,7 +57,7 @@ const SignInForm = () => {
               <FormItem>
                 <FormControl>
                   <Input
-                    className="text-white font-semibold placeholder:text-white border-white py-5"
+                    className="text-white font-semibold border-white py-5"
                     placeholder="Password"
                     type="password"
                     {...field}

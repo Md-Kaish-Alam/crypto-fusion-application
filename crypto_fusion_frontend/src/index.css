@@ -120,7 +120,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .authContainer{
-  background-image: url("/public/authbg.jpg");
+  background-image: url("/authbg.jpg");
   height: 100vh;
   width: 100%;
   background-size: cover;
