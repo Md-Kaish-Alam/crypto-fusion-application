@@ -5,6 +5,7 @@ import com.nuwaish.crypto_fusion.domain.VERIFICATION_TYPE;
 import com.nuwaish.crypto_fusion.modal.TwoFactorAuth;
 import com.nuwaish.crypto_fusion.modal.User;
 import com.nuwaish.crypto_fusion.repository.UserRepository;
+import com.nuwaish.crypto_fusion.request.UserDetailsRequest;
 import com.nuwaish.crypto_fusion.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,4 +65,17 @@ public class UserServiceImpl implements UserService {
         user.setPassword(newPassword);
         userRepository.save(user);
     }
+
+    @Override
+    public User updateUserDetails(User user, UserDetailsRequest request) {
+        user.setDateOfBirth(request.getDateOfBirth());
+        user.setNationality(request.getNationality());
+        user.setAddress(request.getAddress());
+        user.setCity(request.getCity());
+        user.setPincode(request.getPincode());
+        user.setCountry(request.getCountry());
+
+        return userRepository.save(user);
+    }
+
 }

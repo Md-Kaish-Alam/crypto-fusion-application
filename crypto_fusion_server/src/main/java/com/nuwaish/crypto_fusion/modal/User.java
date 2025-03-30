@@ -5,6 +5,8 @@ import com.nuwaish.crypto_fusion.domain.USER_ROLE;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Entity
 @Data
 public class User {
@@ -23,4 +25,11 @@ public class User {
     private TwoFactorAuth twoFactorAuth= new TwoFactorAuth();
 
     private USER_ROLE role=USER_ROLE.ROLE_CUSTOMER;
+
+    private LocalDate dateOfBirth;
+    private String nationality;
+    private String address;
+    private String city;
+    private String pincode;
+    private String country;
 }

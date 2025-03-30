@@ -6,6 +6,7 @@ import com.nuwaish.crypto_fusion.modal.User;
 import com.nuwaish.crypto_fusion.modal.VerificationCode;
 import com.nuwaish.crypto_fusion.request.ForgotPasswordTokenRequest;
 import com.nuwaish.crypto_fusion.request.ResetPasswordRequest;
+import com.nuwaish.crypto_fusion.request.UserDetailsRequest;
 import com.nuwaish.crypto_fusion.response.ApiResponse;
 import com.nuwaish.crypto_fusion.response.AuthResponse;
 import com.nuwaish.crypto_fusion.service.EmailService;
@@ -50,6 +51,18 @@ public class UserController {
         User user = userService.findUserById(userId);
 
         ApiResponse<User> response = new ApiResponse<>(user, HttpStatus.OK.value());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PatchMapping("/api/users/profile/update-details")
+    public ResponseEntity<ApiResponse<User>> updateUserDetails(
+            @RequestHeader("Authorization") String jwt,
+            @RequestBody UserDetailsRequest request) throws Exception {
+
+        User user = userService.findUserByJwt(jwt);
+        User updatedUser = userService.updateUserDetails(user, request);
+
+        ApiResponse<User> response = new ApiResponse<>(updatedUser, "User details updated successfully!", HttpStatus.OK.value());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

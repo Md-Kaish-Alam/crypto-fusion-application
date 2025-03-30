@@ -1,6 +1,4 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSelector } from "react-redux";
 import {
   Dialog,
   DialogContent,
@@ -10,9 +8,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ShieldAlert, VerifiedIcon } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import AccountVerificationForm from "./AccountVerificationForm";
 
 const Profile = () => {
+  const { auth } = useSelector((store) => store);
+
   const handleEnableTwoStepVerification = () => {
     // TODO: Add logic to enable two-step verification
     console.log("EnableTwoStepVerification");
@@ -29,13 +34,11 @@ const Profile = () => {
               <div className="space-y-7">
                 <div className="flex">
                   <p className="w-[9rem]">Email: </p>
-                  <p className="text-muted-foreground">
-                    alamkaishg1511@gmail.com
-                  </p>
+                  <p className="text-muted-foreground">{auth.user?.email}</p>
                 </div>
                 <div className="flex">
                   <p className="w-[9rem]">Full Name: </p>
-                  <p className="text-muted-foreground">Md Kaish Alam</p>
+                  <p className="text-muted-foreground">{auth.user?.fullName}</p>
                 </div>
                 <div className="flex">
                   <p className="w-[9rem]">Date of Birth: </p>
