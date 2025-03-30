@@ -1,4 +1,6 @@
+import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
   Form,
@@ -10,9 +12,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+// Validation schema using Yup
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
+});
+
 const ForgotPasswordForm = () => {
   const form = useForm({
-    resolver: "",
+    resolver: yupResolver(validationSchema),
     defaultValues: {
       email: "",
     },
@@ -21,6 +31,7 @@ const ForgotPasswordForm = () => {
   const onSubmit = (data) => {
     // TODO: handle form submission
     console.log({ data });
+    form.reset();
   };
 
   return (
@@ -30,7 +41,7 @@ const ForgotPasswordForm = () => {
         Please verify your email address
       </p>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="email"
@@ -38,12 +49,14 @@ const ForgotPasswordForm = () => {
               <FormItem>
                 <FormControl>
                   <Input
-                    className="text-white font-semibold border-white py-5 mb-6"
+                    className="text-white font-semibold border-white py-5"
                     placeholder="example123@gmail.com"
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500 font-bold">
+                  {form.formState.errors.email?.message}
+                </FormMessage>
               </FormItem>
             )}
           />

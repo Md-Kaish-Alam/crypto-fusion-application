@@ -1,4 +1,6 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import Auth from "@/page/Auth/Auth";
 import Home from "@/page/Home/Home";
@@ -13,12 +15,18 @@ import Withdrawal from "./page/Withdrawal/Withdrawal";
 import PageNotFound from "@/page/PageNotFound/PageNotFound";
 import StockDetails from "@/page/StockDetails/StockDetails";
 import PaymentDetails from "@/page/PaymentDetails/PaymentDetails";
+import { getUser } from "@/store/Auth/AuthAction";
 
 const App = () => {
-  const isAuthenticated = false;
+  const { auth } = useSelector((store) => store);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUser(auth.jwt || localStorage.getItem("jwt")));
+  }, [auth.jwt, dispatch]);
   return (
     <>
-      {isAuthenticated ? (
+      {auth.user ? (
         <>
           <Navbar />
           <Routes>
@@ -36,10 +44,7 @@ const App = () => {
           </Routes>
         </>
       ) : (
-        <Routes>
-          <Route path="*" element={<Navigate to="/auth" />} />
-          <Route path="/auth" element={<Auth />} />
-        </Routes>
+        <Auth />
       )}
     </>
   );

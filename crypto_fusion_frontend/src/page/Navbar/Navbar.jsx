@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { Menu, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +16,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Sidebar from "./Sidebar";
 
 const Navbar = () => {
+  const { auth } = useSelector((store) => store);
   const navigate = useNavigate();
   return (
     <div className="px-6 py-3 border-b z-50 bg-background bg-opacity-0 sticky top-0 left-0 right-0 flex justify-between items-center">
@@ -62,7 +64,14 @@ const Navbar = () => {
       </div>
       <div>
         <Avatar className="cursor-pointer" onClick={() => navigate("/profile")}>
-          <AvatarFallback>KA</AvatarFallback>
+          <AvatarFallback>
+            {auth.user?.fullName
+              .split(" ")
+              .map((name) => name[0])
+              .slice(0, 2)
+              .join("")
+              .toUpperCase()}
+          </AvatarFallback>
         </Avatar>
       </div>
     </div>

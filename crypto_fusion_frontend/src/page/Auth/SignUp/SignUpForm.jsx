@@ -1,4 +1,8 @@
+import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
   Form,
@@ -9,12 +13,40 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { register } from "@/store/Auth/AuthAction";
+
+// Validation schema using Yup
+const validationSchema = yup.object().shape({
+  fullName: yup.string().required("Full Name is required"),
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .matches(/[A-Z]/, "Password must have at least one uppercase letter")
+    .matches(/[a-z]/, "Password must have at least one lowercase letter")
+    .matches(/\d/, "Password must have at least one number")
+    .matches(
+      /[@$!%*?&]/,
+      "Password must have at least one special character (@$!%*?&)"
+    ),
+  confirm_password: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .required("Confirm Password is required"),
+});
 
 const SignUpForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const form = useForm({
-    resolver: "",
+    resolver: yupResolver(validationSchema),
     defaultValues: {
-      fullname: "",
+      fullName: "",
       email: "",
       password: "",
       confirm_password: "",
@@ -22,8 +54,8 @@ const SignUpForm = () => {
   });
 
   const onSubmit = (data) => {
-    // TODO: handle form submission
-    console.log({ data });
+    dispatch(register({ data, navigate }));
+    form.reset();
   };
 
   return (
@@ -35,7 +67,7 @@ const SignUpForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name="fullname"
+            name="fullName"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -45,7 +77,9 @@ const SignUpForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500 font-bold">
+                  {form.formState.errors.fullName?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -61,7 +95,9 @@ const SignUpForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500 font-bold">
+                  {form.formState.errors.email?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -78,7 +114,9 @@ const SignUpForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500 font-bold">
+                  {form.formState.errors.password?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -94,7 +132,9 @@ const SignUpForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500 font-bold">
+                  {form.formState.errors.confirm_password?.message}
+                </FormMessage>
               </FormItem>
             )}
           />

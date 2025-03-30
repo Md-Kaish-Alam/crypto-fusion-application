@@ -20,7 +20,11 @@ const Auth = () => {
               <SignUpForm />
               <div className="flex items-center justify-center gap-2 mt-2">
                 <span>Have already account ?</span>
-                <Button variant="link" className="p-0" onClick={() => navigate("/signin")}>
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() => navigate("/signin")}
+                >
                   Sign In
                 </Button>
               </div>
@@ -30,7 +34,11 @@ const Auth = () => {
               <ForgotPasswordForm />
               <div className="flex items-center justify-center gap-2 mt-2">
                 <span>Want back to sign in ?</span>
-                <Button variant="link" className="p-0" onClick={() => navigate("/signin")}>
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() => navigate("/signin")}
+                >
                   Sign In
                 </Button>
               </div>

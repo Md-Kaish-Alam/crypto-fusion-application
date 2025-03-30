@@ -1,5 +1,8 @@
+import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
   Form,
@@ -10,12 +13,33 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { login } from "@/store/Auth/AuthAction";
+
+// Validation schema using Yup
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .matches(/[A-Z]/, "Password must have at least one uppercase letter")
+    .matches(/[a-z]/, "Password must have at least one lowercase letter")
+    .matches(/\d/, "Password must have at least one number")
+    .matches(
+      /[@$!%*?&]/,
+      "Password must have at least one special character (@$!%*?&)"
+    ),
+});
 
 const SignInForm = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const form = useForm({
-    resolver: "",
+    resolver: yupResolver(validationSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -23,8 +47,8 @@ const SignInForm = () => {
   });
 
   const onSubmit = (data) => {
-    // TODO: handle form submission
-    console.log({ data });
+    dispatch(login({ data, navigate }));
+    form.reset();
   };
 
   return (
@@ -33,7 +57,7 @@ const SignInForm = () => {
         Please Sign In to Continue
       </h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="email"
@@ -41,12 +65,14 @@ const SignInForm = () => {
               <FormItem>
                 <FormControl>
                   <Input
-                    className="text-white font-semibold border-white py-5 mb-6"
+                    className="text-white font-semibold border-white py-5"
                     placeholder="example123@gmail.com"
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500 font-bold">
+                  {form.formState.errors.email?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -63,17 +89,19 @@ const SignInForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500 font-bold">
+                  {form.formState.errors.password?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
           <p
-            className="px-1 mt-2 text-sm font-semibold cursor-pointer"
+            className="px-1 text-sm font-semibold cursor-pointer"
             onClick={() => navigate("/forgot-password")}
           >
             Forgot Password ?
           </p>
-          <Button type="submit" className="w-full mt-6">
+          <Button type="submit" className="w-full">
             Sign In
           </Button>
         </form>
