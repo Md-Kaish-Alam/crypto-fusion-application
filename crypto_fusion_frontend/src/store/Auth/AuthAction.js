@@ -78,3 +78,30 @@ export const getUser = (token) => async (dispatch) => {
     dispatch({ type: authActionTypes.GET_USER_FAILURE, payload: errorMessage });
   }
 };
+
+// AuthAction.js
+export const updateUserProfile = (userData, token) => async (dispatch) => {
+  dispatch({ type: authActionTypes.UPDATE_USER_REQUEST });
+  console.log({ token });
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URL}/api/users/profile/update-details`,
+      userData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const updatedUser = response.data;
+    dispatch({
+      type: authActionTypes.UPDATE_USER_SUCCESS,
+      payload: updatedUser.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: authActionTypes.UPDATE_USER_FAILURE,
+      payload: error.response?.data ? error.response.data : error,
+    });
+  }
+};

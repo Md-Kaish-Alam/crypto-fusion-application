@@ -42,8 +42,22 @@ const authReducer = (state = initialState, action) => {
 
     case authActionTypes.LOGOUT:
       return initialState;
-    
-      default:
+
+    case authActionTypes.UPDATE_USER_REQUEST:
+      return { ...state, loading: true, error: null };
+
+    case authActionTypes.UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        user: { ...state.user, ...action.payload },
+        error: null,
+      };
+
+    case authActionTypes.UPDATE_USER_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+
+    default:
       return state;
   }
 };
