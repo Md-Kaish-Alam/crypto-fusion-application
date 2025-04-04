@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
 import { updateUserProfile } from "@/store/Auth/AuthAction";
+import { useState } from "react";
 
 // Validation schema for updating user details
 const updateUserValidationSchema = yup.object().shape({
@@ -42,6 +43,7 @@ const updateUserValidationSchema = yup.object().shape({
 });
 
 const UpdateProfileDetailsForm = () => {
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
   const { auth } = useSelector((store) => store);
   const dispatch = useDispatch();
   const form = useForm({
@@ -122,7 +124,10 @@ const UpdateProfileDetailsForm = () => {
               name="dateOfBirth"
               render={({ field }) => (
                 <FormItem>
-                  <Popover>
+                  <Popover
+                    open={datePickerOpen}
+                    onOpenChange={setDatePickerOpen}
+                  >
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -131,6 +136,7 @@ const UpdateProfileDetailsForm = () => {
                             "w-full text-left font-normal h-11 border border-white",
                             !field.value && "text-muted-foreground"
                           )}
+                          onClick={() => setDatePickerOpen(true)}
                         >
                           {field.value
                             ? format(field.value, "PPP")
@@ -143,11 +149,25 @@ const UpdateProfileDetailsForm = () => {
                       <Calendar
                         mode="single"
                         selected={field.value}
-                        onSelect={field.onChange}
+                        onSelect={(date) => {
+                          if (date) {
+                            // Adjust date to remove timezone issues
+                            const adjustedDate = new Date(
+                              Date.UTC(
+                                date.getFullYear(),
+                                date.getMonth(),
+                                date.getDate()
+                              )
+                            );
+                            field.onChange(adjustedDate);
+                            setDatePickerOpen(false);
+                          }
+                        }}
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
                         initialFocus
+                        defaultMonth={field.value || new Date("2000-01-01")}
                       />
                     </PopoverContent>
                   </Popover>
