@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { login } from "@/store/Auth/AuthAction";
+import PasswordToggle from "@/components/PasswordToggle";
 
 // Validation schema using Yup
 const validationSchema = yup.object().shape({
@@ -35,6 +37,7 @@ const validationSchema = yup.object().shape({
 });
 
 const SignInForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -82,12 +85,18 @@ const SignInForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input
-                    className="text-white font-semibold border-white py-5"
-                    placeholder="Password"
-                    type="password"
-                    {...field}
-                  />
+                  <div className="relative">
+                    <Input
+                      className="text-white font-semibold border-white py-5 pr-10"
+                      placeholder="Password"
+                      type={showPassword ? "text" : "password"}
+                      {...field}
+                    />
+                    <PasswordToggle
+                      isVisible={showPassword}
+                      toggleVisibility={() => setShowPassword((prev) => !prev)}
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage className="text-red-500 font-bold">
                   {form.formState.errors.password?.message}
