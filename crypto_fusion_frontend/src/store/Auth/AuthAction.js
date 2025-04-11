@@ -1,7 +1,6 @@
 import axios from "axios";
 import * as authActionTypes from "./AuthActionTypes";
-
-const API_BASE_URL = "http://localhost:8088";
+import { API_BASE_URL } from "@/config/api";
 
 // user register action
 export const register = (userData) => async (dispatch) => {

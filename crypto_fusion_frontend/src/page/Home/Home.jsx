@@ -1,18 +1,32 @@
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Dot, MessageCircle, X } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { fetchCoinList, getTop50CoinList } from "@/store/Coin/CoinAction";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import StockChart from "./StockChart";
 import AssetsTable from "./AssetsTable";
 
 const Home = () => {
+  const dispatch = useDispatch();
+
   const [category, setCategory] = useState("all");
   const [inputValue, setInputValue] = useState("");
   const [isBotRelease, setIsBotRelease] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+
+  const { coin } = useSelector((state) => state);
+
+  useEffect(() => {
+    dispatch(fetchCoinList(1));
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getTop50CoinList());
+  }, [category, dispatch]);
 
   const handleCategory = (category) => {
     setCategory(category);
@@ -72,7 +86,10 @@ const Home = () => {
               Top Losers
             </Button>
           </div>
-          <AssetsTable />
+          <AssetsTable
+            coins={category === "all" ? coin.coinList : coin.top50}
+            category={category}
+          />
         </div>
 
         {/* right panel */}
@@ -83,20 +100,26 @@ const Home = () => {
           <div className="flex items-center gap-5">
             <div>
               <Avatar>
-                <AvatarImage src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
+                <AvatarImage src={coin?.coinList[0]?.image} />
               </Avatar>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <p>BTC</p>
+                <p>{coin?.coinList[0]?.symbol}</p>
                 <Dot className="text-muted-foreground" />
-                <p className="text-muted-foreground">Bitcoin</p>
+                <p className="text-muted-foreground">
+                  {coin?.coinList[0]?.name}
+                </p>
               </div>
               <div className="flex items-end gap-2">
-                <p className="text-xl font-bold">$86424</p>
+                <p className="text-xl font-bold">
+                  ${coin?.coinList[0]?.current_price}
+                </p>
                 <p className="text-red-600">
-                  <span>-38341779668.75586</span>
-                  <span>(-2.18831%)</span>
+                  <span>{coin?.coinList[0]?.market_cap_change_24h}</span>
+                  <span>
+                    ({coin?.coinList[0]?.market_cap_change_percentage_24h}%)
+                  </span>
                 </p>
               </div>
             </div>

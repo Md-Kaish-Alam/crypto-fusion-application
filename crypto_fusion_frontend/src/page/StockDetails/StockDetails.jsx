@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { Bookmark, BookmarkCheck, Dot } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  Bookmark,
+  BookmarkCheck,
+  Dot,
+} from "lucide-react";
 
 import {
   Dialog,
@@ -13,10 +17,23 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import TradingForm from "./TradingForm";
 import StockChart from "../Home/StockChart";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { fetchCoinDetails } from "@/store/Coin/CoinAction";
 
 const StockDetails = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const { coin } = useSelector((store) => store);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
+  useEffect(() => {
+    dispatch(
+      fetchCoinDetails({ coinId: id, jwt: localStorage.getItem("jwt") })
+    );
+  }, [dispatch, id]);
+
+  console.log({ coin });
   const handleBookmark = () => {
     setIsBookmarked(!isBookmarked);
     // TODO: handle bookmark functionality
@@ -28,19 +45,31 @@ const StockDetails = () => {
         <div className="flex gap-5 items-center">
           <div>
             <Avatar>
-              <AvatarImage src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
+              <AvatarImage src={coin.coinDetails?.image.large} />
             </Avatar>
           </div>
           <div>
             <div className="flex items-center gap-1">
-              <p>BTC</p>
+              <p>{coin.coinDetails?.symbol}</p>
               <Dot className="text-muted-foreground" />
-              <p className="text-muted-foreground">Bitcoin</p>
+              <p className="text-muted-foreground">{coin.coinDetails?.name}</p>
             </div>
             <div className="flex items-end gap-2">
-              <p className="text-xl font-bold">$86424</p>
+              <p className="text-xl font-bold">
+                ${coin.coinDetails?.market_data?.current_price?.usd}
+              </p>
               <p className="text-red-600">
-                <span>-38341779668.75586</span> <span>(-2.18831%)</span>
+                <span>
+                  {coin.coinDetails?.market_data?.market_cap_change_24h}
+                </span>{" "}
+                <span>
+                  (
+                  {
+                    coin.coinDetails?.market_data
+                      ?.market_cap_change_percentage_24h
+                  }
+                  %)
+                </span>
               </p>
             </div>
           </div>
@@ -55,7 +84,7 @@ const StockDetails = () => {
           </Button>
           <Dialog>
             <DialogTrigger>
-              <Button size="lg">Trade</Button>
+              <Button size="lg" className="text-lg">Trade</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
