@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Bookmark,
-  BookmarkCheck,
-  Dot,
-} from "lucide-react";
+import { Bookmark, BookmarkCheck, Dot, Link } from "lucide-react";
 
 import {
   Dialog,
@@ -50,9 +46,21 @@ const StockDetails = () => {
           </div>
           <div>
             <div className="flex items-center gap-1">
-              <p>{coin.coinDetails?.symbol}</p>
+              <p>{coin.coinDetails?.symbol?.toUpperCase()}</p>
               <Dot className="text-muted-foreground" />
               <p className="text-muted-foreground">{coin.coinDetails?.name}</p>
+              <Link
+                className="h-4 w-4 text-blue-400 cursor-pointer mx-1"
+                onClick={() => {
+                  const url = coin?.coinDetails?.links?.homepage[0];
+                  if (url) {
+                    window.open(
+                      url.startsWith("http") ? url : `https://${url}`,
+                      "_blank"
+                    );
+                  }
+                }}
+              />
             </div>
             <div className="flex items-end gap-2">
               <p className="text-xl font-bold">
@@ -84,7 +92,9 @@ const StockDetails = () => {
           </Button>
           <Dialog>
             <DialogTrigger>
-              <Button size="lg" className="text-lg">Trade</Button>
+              <Button size="lg" className="text-lg">
+                Trade
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -100,7 +110,7 @@ const StockDetails = () => {
 
       {/* Stock Chart */}
       <div className="mt-10">
-        <StockChart />
+        <StockChart coinId={id} />
       </div>
     </div>
   );

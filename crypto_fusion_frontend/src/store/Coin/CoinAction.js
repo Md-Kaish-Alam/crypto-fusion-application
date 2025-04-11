@@ -59,17 +59,20 @@ export const fetchMarketChart =
   async (dispatch) => {
     dispatch({ type: coinActionTypes.FETCH_MARKET_CHART_REQUEST });
     try {
-      const response = await api.get(`/coins/${coinId}/chart?days=${days}`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+      const response = await api.get(
+        `/coins/${coinId}/market-chart?days=${days}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      const marketChart = response.data.data;
       dispatch({
         type: coinActionTypes.FETCH_MARKET_CHART_SUCCESS,
-        payload: response.data,
+        payload: marketChart,
       });
     } catch (error) {
-      console.log("error", error);
       dispatch({
         type: coinActionTypes.FETCH_MARKET_CHART_FAILURE,
         payload: error.message,

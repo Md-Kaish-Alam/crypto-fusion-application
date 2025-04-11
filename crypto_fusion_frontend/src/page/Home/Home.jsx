@@ -1,10 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Dot, MessageCircle, X } from "lucide-react";
+import { ChevronLeftIcon, Dot, MessageCircle, X } from "lucide-react";
 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+} from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { fetchCoinList, getTop50CoinList } from "@/store/Coin/CoinAction";
+import {
+  fetchCoinList,
+  fetchTradingCoinList,
+  getTop50CoinList,
+} from "@/store/Coin/CoinAction";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import StockChart from "./StockChart";
@@ -13,19 +25,24 @@ import AssetsTable from "./AssetsTable";
 const Home = () => {
   const dispatch = useDispatch();
 
+  const [page, setPage] = useState(1);
+  const [isTyping, setIsTyping] = useState(false);
   const [category, setCategory] = useState("all");
   const [inputValue, setInputValue] = useState("");
   const [isBotRelease, setIsBotRelease] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
 
   const { coin } = useSelector((state) => state);
 
   useEffect(() => {
-    dispatch(fetchCoinList(1));
-  }, [dispatch]);
+    dispatch(fetchCoinList(page));
+  }, [page, dispatch]);
 
   useEffect(() => {
-    dispatch(getTop50CoinList());
+    if (category == "top50") {
+      dispatch(getTop50CoinList());
+    } else if (category == "trading") {
+      dispatch(fetchTradingCoinList());
+    }
   }, [category, dispatch]);
 
   const handleCategory = (category) => {
@@ -45,6 +62,10 @@ const Home = () => {
 
   const handleIsTyping = () => {
     setIsTyping(true);
+  };
+
+  const handlePageChange = (page) => {
+    setPage(page);
   };
 
   useEffect(() => {
@@ -90,11 +111,73 @@ const Home = () => {
             coins={category === "all" ? coin.coinList : coin.top50}
             category={category}
           />
+          {category == "all" && (
+            <Pagination className="py-2">
+              <PaginationContent>
+                <PaginationItem>
+                  <Button
+                    variant="ghost"
+                    disabled={page == 1}
+                    onClick={() => handlePageChange(page - 1)}
+                  >
+                    <ChevronLeftIcon className="h-4 w-4 mr-1" />
+                    Previous
+                  </Button>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={() => handlePageChange(1)}
+                    isActive={page == 1}
+                    className="cursor-pointer"
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={() => handlePageChange(2)}
+                    isActive={page == 2}
+                    className="cursor-pointer"
+                  >
+                    2
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={() => handlePageChange(3)}
+                    isActive={page == 3}
+                    className="cursor-pointer"
+                  >
+                    3
+                  </PaginationLink>
+                </PaginationItem>
+                {page > 3 && (
+                  <PaginationItem>
+                    <PaginationLink
+                      onClick={() => handlePageChange(3)}
+                      isActive
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                )}
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext
+                    className="cursor-pointer"
+                    onClick={() => handlePageChange(page + 1)}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
         </div>
 
         {/* right panel */}
         <div className="hidden lg:block lg:w-[50%] p-5 fixed right-0 top-16 h-[100vh] overflow-hidden">
-          <StockChart />
+          <StockChart coinId={coin?.coinList[0]?.id} />
 
           {/* Coin details */}
           <div className="flex items-center gap-5">
