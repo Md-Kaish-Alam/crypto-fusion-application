@@ -106,7 +106,7 @@
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-html, body {
+.no_scroll {
   height: 100%;
   overflow: hidden;
 }

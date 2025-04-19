@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { Dot } from "lucide-react";
+import { useDispatch } from "react-redux";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
+import { paymentHandler } from "@/store/Wallet/WalletAction";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const AddMoneyForm = () => {
+  
+  const dispatch = useDispatch();
+
   const [amount, setAmount] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("RAZORPAY");
 
@@ -21,8 +26,13 @@ const AddMoneyForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Add money to wallet
-    console.log({ amount, paymentMethod });
+    dispatch(
+      paymentHandler({
+        jwt: localStorage.getItem("jwt"),
+        paymentMethod,
+        amount,
+      })
+    );
     setAmount("");
     setPaymentMethod("RAZORPAY");
   };

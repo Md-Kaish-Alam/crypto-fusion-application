@@ -6,6 +6,9 @@ import {
   DollarSign,
   RefreshCcw,
 } from "lucide-react";
+import { useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   Dialog,
@@ -14,59 +17,54 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  depositMoney,
+  getUserWallet,
+  getWalletTransactions,
+} from "@/store/Wallet/WalletAction";
 import { Button } from "@/components/ui/button";
+import { CopyButton } from "@/components/CopyButton";
+import { generateStripePaymentId } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import AddMoneyForm from "./AddMoneyForm";
 import TransferForm from "./TransferForm";
 import WithdrawalForm from "./WithdrawalForm";
-import { CopyButton } from "@/components/CopyButton";
 
-const transaction_history = [
-  {
-    title: "Withdrawal",
-    date: "2025-03-09",
-    amount: "-150.00",
-  },
-  {
-    title: "Buy Asset",
-    date: "2025-03-08",
-    amount: "-320.75",
-  },
-  {
-    title: "Sell Asset",
-    date: "2025-03-07",
-    amount: "+540.25",
-  },
-  {
-    title: "Wallet Transfer",
-    date: "2025-03-06",
-    amount: "-200.50",
-  },
-  {
-    title: "Withdrawal",
-    date: "2025-03-05",
-    amount: "-75.00",
-  },
-  {
-    title: "Buy Asset",
-    date: "2025-03-04",
-    amount: "-95.30",
-  },
-  {
-    title: "Sell Asset",
-    date: "2025-03-03",
-    amount: "+272.00",
-  },
-  {
-    title: "Wallet Transfer",
-    date: "2025-03-02",
-    amount: "-65.90",
-  },
-];
-
+function useQuery() {
+  return new URLSearchParams(window.location.search);
+}
 const Wallet = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { wallet } = useSelector((store) => store);
+
+  const query = useQuery();
+  const orderId = query.get("order_id");
+  const razorpayPaymentId = query.get("razorpay_payment_id");
+
+  // generate stripe ID only once on initial mount
+  const stripePaymentId = useMemo(() => generateStripePaymentId(), []);
+
+  useEffect(() => {
+    if (orderId) {
+      dispatch(
+        depositMoney({
+          jwt: localStorage.getItem("jwt"),
+          orderId,
+          paymentId: razorpayPaymentId || stripePaymentId,
+          navigate,
+        })
+      );
+    }
+  }, [orderId, stripePaymentId, razorpayPaymentId, dispatch, navigate]);
+
+  useEffect(() => {
+    dispatch(getUserWallet(localStorage.getItem("jwt")));
+    dispatch(getWalletTransactions({ jwt: localStorage.getItem("jwt") }));
+  }, [dispatch]);
+
   return (
     <div className="flex flex-col items-center">
       <div className="pt-10 w-[full] lg:w-[60%]">
@@ -77,21 +75,31 @@ const Wallet = () => {
                 <Wallet2 size={40} />
                 <div>
                   <CardTitle className="text-2xl">My Wallet</CardTitle>
-                  <div className="flex items-center gap-2 mt-1">
-                    <p className="text-muted-foreground text-sm">#AA56DH</p>
-                    <CopyButton value="#AA56DH" />
+                  <div className="flex items-center gap-1">
+                    <p className="text-muted-foreground text-sm">
+                      #{wallet.userWallet?.id}
+                    </p>
+                    <CopyButton
+                      value={wallet.userWallet?.id?.toString() || " "}
+                    />
                   </div>
                 </div>
               </div>
-              <Button size="icon" variant="ghost">
-                <RefreshCcw className="scale-[1.5]" />
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => window.location.reload()}
+              >
+                <RefreshCcw className="scale-[1.5] cursor-pointer" />
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             <div className="flex items-center">
               <DollarSign />
-              <span className="text-2xl font-semibold">34685.00</span>
+              <span className="text-2xl font-semibold">
+                {wallet.userWallet?.balance}
+              </span>
             </div>
 
             <div className="flex gap-6 mt-5">
@@ -154,14 +162,18 @@ const Wallet = () => {
 
         <div className="py-5 mt-2">
           <div className="flex gap-3 items-center pb-5">
-            <h1 className="text-2xl font-semibold">Transaction History</h1>
-            <Button size="icon" variant="ghost">
+            <h1 className="text-2xl font-semibold">Transaction item</h1>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => window.location.reload()}
+            >
               <RefreshCcw className="scale-[1.5]" />
             </Button>
           </div>
 
           <div className="space-y-5">
-            {transaction_history.map((history, index) => (
+            {wallet.transactions?.map((item, index) => (
               <Card
                 key={index}
                 className="px-5 flex justify-between items-center py-2"
@@ -174,19 +186,19 @@ const Wallet = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="space-y-1">
-                    <h1>{history.title}</h1>
+                    <h1>{item.type || item.purpose}</h1>
                     <p className="text-sm text-muted-foreground">
-                      {history.date}
+                      {item.date}
                     </p>
                   </div>
                 </div>
                 <div>
                   <p
                     className={`${
-                      history.amount > 0 ? "text-green-500" : "text-red-600"
+                      item.amount > 0 ? "text-green-500" : "text-red-600"
                     }`}
                   >
-                    ${history.amount}
+                    ${item.amount}
                   </p>
                 </div>
               </Card>

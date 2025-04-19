@@ -2,16 +2,14 @@ package com.nuwaish.crypto_fusion.controller;
 
 import com.nuwaish.crypto_fusion.modal.*;
 import com.nuwaish.crypto_fusion.response.ApiResponse;
-import com.nuwaish.crypto_fusion.service.OrderService;
-import com.nuwaish.crypto_fusion.service.PaymentOrderService;
-import com.nuwaish.crypto_fusion.service.UserService;
-import com.nuwaish.crypto_fusion.service.WalletService;
+import com.nuwaish.crypto_fusion.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/wallet")
@@ -29,6 +27,9 @@ public class WalletController {
     @Autowired
     private PaymentOrderService paymentOrderService;
 
+    @Autowired
+    private WalletTransactionService walletTransactionService;
+
     @GetMapping
     public ResponseEntity<ApiResponse<Wallet>> getUserWallet(
             @RequestHeader("Authorization") String jwt) throws Exception {
@@ -41,6 +42,24 @@ public class WalletController {
         response.setStatusCode(HttpStatus.ACCEPTED.value());
 
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/transactions")
+    public ResponseEntity<ApiResponse<List<WalletTransaction>>> getUserWalletTransactions(
+            @RequestHeader("Authorization") String jwt) throws Exception {
+
+        User user=userService.findUserByJwt(jwt);
+
+        Wallet wallet = walletService.getUserWallet(user);
+
+        List<WalletTransaction> transactions=walletTransactionService.getTransactions(wallet,null);
+
+        ApiResponse<List<WalletTransaction>> response = new ApiResponse<>();
+        response.setData(transactions);
+        response.setMessage("User's Wallet Transactions fetched successfully.");
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{walletId}/transfer")

@@ -6,8 +6,6 @@ import com.nuwaish.crypto_fusion.modal.User;
 import com.nuwaish.crypto_fusion.response.PaymentResponse;
 import com.nuwaish.crypto_fusion.service.PaymentOrderService;
 import com.nuwaish.crypto_fusion.service.UserService;
-import com.razorpay.RazorpayException;
-import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

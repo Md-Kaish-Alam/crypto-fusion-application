@@ -74,7 +74,7 @@ const Home = () => {
 
   return (
     <div className="relative">
-      <div className="lg:flex h-[100vh]">
+      <div className="lg:flex h-[100vh] no_scroll">
         {/* left panel */}
         <div className="lg:w-[50%] lg:border-r px-2 overflow-y-auto max-h-[100vh] scroll-container">
           <div className="p-3 flex items-center gap-4">
