@@ -187,18 +187,26 @@ const Wallet = () => {
                   </Avatar>
                   <div className="space-y-1">
                     <h1>{item.type || item.purpose}</h1>
-                    <p className="text-sm text-muted-foreground">
-                      {item.date}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{item.date}</p>
                   </div>
                 </div>
                 <div>
                   <p
                     className={`${
-                      item.amount > 0 ? "text-green-500" : "text-red-600"
+                      ["ADD_AMOUNT", "SELL_ASSET"].includes(
+                        item.type
+                      )
+                        ? "text-green-500"
+                        : "text-red-600"
                     }`}
                   >
-                    ${item.amount}
+                    $
+                    {["ADD_AMOUNT", "SELL_ASSET"].includes(
+                      item.type
+                    )
+                      ? " +"
+                      : " -"}
+                    {item.amount}
                   </p>
                 </div>
               </Card>
