@@ -3,13 +3,16 @@ import { applyMiddleware, combineReducers, legacy_createStore } from "redux";
 
 import authReducer from "./Auth/AuthReducer";
 import coinReducer from "./Coin/CoinReducer";
+import orderReducer from "./Order/OrderReducer";
+import assetReducer from "./Asset/AssetReducer";
 import walletReducer from "./Wallet/WalletReducer";
 import withdrawalReducer from "./Withdrawal/WithdrawalReducer";
-
 
 const rootReducer = combineReducers({
   auth: authReducer,
   coin: coinReducer,
+  order: orderReducer,
+  asset: assetReducer,
   wallet: walletReducer,
   withdrawal: withdrawalReducer,
 });

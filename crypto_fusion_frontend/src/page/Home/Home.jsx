@@ -198,10 +198,19 @@ const Home = () => {
                 <p className="text-xl font-bold">
                   ${coin?.coinList[0]?.current_price}
                 </p>
-                <p className="text-red-600">
-                  <span>{coin?.coinList[0]?.market_cap_change_24h}</span>
+                <p
+                  className={`${
+                    coin?.coinList[0]?.market_cap_change_24h < 0
+                      ? "text-red-600"
+                      : "text-green-600"
+                  }`}
+                >
+                  <span className="">
+                    {coin?.coinList[0]?.market_cap_change_24h}
+                  </span>
                   <span>
-                    ({coin?.coinList[0]?.market_cap_change_percentage_24h}%)
+                    ({coin?.coinList[0]?.market_cap_change_percentage_24h}
+                    %)
                   </span>
                 </p>
               </div>

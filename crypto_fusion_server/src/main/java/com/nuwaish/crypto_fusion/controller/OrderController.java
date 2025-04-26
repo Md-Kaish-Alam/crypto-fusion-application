@@ -29,9 +29,6 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private WalletTransactionService walletTransactionService;
-
     @PostMapping("/pay")
     public ResponseEntity<ApiResponse<Order>> payOrderPayment(
             @RequestHeader("Authorization") String jwt,
