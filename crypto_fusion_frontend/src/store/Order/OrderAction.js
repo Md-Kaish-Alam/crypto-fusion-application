@@ -54,7 +54,6 @@ export const getAllOrdersForUser =
   ({ jwt, orderType, assetSymbol }) =>
   async (dispatch) => {
     dispatch({ type: orderActionTypes.GET_ALL_ORDERS_REQUEST });
-
     try {
       const response = await api.get("/api/orders", {
         headers: {
@@ -65,14 +64,11 @@ export const getAllOrdersForUser =
           asset_symbol: assetSymbol,
         },
       });
-
       dispatch({
         type: orderActionTypes.GET_ALL_ORDERS_SUCCESS,
         payload: response.data.data,
       });
-      console.log("order success", response.data.data);
     } catch (error) {
-      console.log("error ", error);
       dispatch({
         type: orderActionTypes.GET_ALL_ORDERS_FAILURE,
         error: error.message,

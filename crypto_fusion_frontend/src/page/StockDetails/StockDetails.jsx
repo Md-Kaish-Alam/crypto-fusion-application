@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Bookmark, BookmarkCheck, Dot, Link } from "lucide-react";
 
 import {
@@ -8,20 +10,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  addItemToWatchlist,
+  getUserWatchlist,
+  removeItemFromWatchlist,
+} from "@/store/Watchlist/WatchlistAction";
+import { existInWatchlist } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { fetchCoinDetails } from "@/store/Coin/CoinAction";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import TradingForm from "./TradingForm";
 import StockChart from "../Home/StockChart";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { fetchCoinDetails } from "@/store/Coin/CoinAction";
 
 const StockDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { coin } = useSelector((store) => store);
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const { coin, watchlist } = useSelector((store) => store);
 
   useEffect(() => {
     dispatch(
@@ -29,9 +34,26 @@ const StockDetails = () => {
     );
   }, [dispatch, id]);
 
+  useEffect(() => {
+    dispatch(getUserWatchlist(localStorage.getItem("jwt")));
+  }, [dispatch]);
+
   const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
-    // TODO: handle bookmark functionality
+    if (existInWatchlist(watchlist.items, coin.coinDetails)) {
+      dispatch(
+        removeItemFromWatchlist({
+          jwt: localStorage.getItem("jwt"),
+          coinId: coin.coinDetails?.id,
+        })
+      );
+    } else {
+      dispatch(
+        addItemToWatchlist({
+          jwt: localStorage.getItem("jwt"),
+          coinId: coin.coinDetails?.id,
+        })
+      );
+    }
   };
 
   return (
@@ -89,7 +111,7 @@ const StockDetails = () => {
         </div>
         <div className="flex items-center gap-3">
           <Button className="h-10 w-10" onClick={handleBookmark}>
-            {isBookmarked ? (
+            {existInWatchlist(watchlist.items, coin.coinDetails) ? (
               <BookmarkCheck className="scale-[1.5]" />
             ) : (
               <Bookmark className="scale-[1.3]" fill="black" />

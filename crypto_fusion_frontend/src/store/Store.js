@@ -6,6 +6,7 @@ import coinReducer from "./Coin/CoinReducer";
 import orderReducer from "./Order/OrderReducer";
 import assetReducer from "./Asset/AssetReducer";
 import walletReducer from "./Wallet/WalletReducer";
+import watchlistReducer from "./Watchlist/WatchlistReducer";
 import withdrawalReducer from "./Withdrawal/WithdrawalReducer";
 
 const rootReducer = combineReducers({
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   order: orderReducer,
   asset: assetReducer,
   wallet: walletReducer,
+  watchlist: watchlistReducer,
   withdrawal: withdrawalReducer,
 });
 

@@ -64,3 +64,22 @@ export const readableTimestamp = (timestamp) => {
   const formattedDate = date.toLocaleString("en-US", options);
   return formattedDate;
 };
+
+export const existInWatchlist = (items, coin) => {
+  for (let item of items) {
+    if (item?.id === coin?.id) return true;
+  }
+  return false;
+};
+
+export const calculateProfite = (order) => {
+  if (
+    order &&
+    order.orderItem &&
+    order.orderItem.buyPrice &&
+    order.orderItem.sellPrice
+  ) {
+    return order.orderItem.sellPrice - order.orderItem.buyPrice;
+  }
+  return "-";
+};
