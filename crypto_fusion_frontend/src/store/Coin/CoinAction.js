@@ -42,11 +42,9 @@ export const fetchTradingCoinList = () => async (dispatch) => {
     const response = await axios.get(`${API_BASE_URL}/coins/trading`);
     dispatch({
       type: coinActionTypes.FETCH_TRADING_COINS_SUCCESS,
-      payload: response.data,
+      payload: response.data.data,
     });
-    console.log("trading coins", response.data);
   } catch (error) {
-    console.log("error", error);
     dispatch({
       type: coinActionTypes.FETCH_TRADING_COINS_FAILURE,
       payload: error.message,
@@ -129,11 +127,9 @@ export const searchCoin = (keyword) => async (dispatch) => {
     const response = await api.get(`/coins/search?query=${keyword}`);
     dispatch({
       type: coinActionTypes.SEARCH_COIN_SUCCESS,
-      payload: response.data,
+      payload: response.data.data,
     });
-    console.log("search coin", response.data);
   } catch (error) {
-    console.log("error", error);
     dispatch({
       type: coinActionTypes.SEARCH_COIN_FAILURE,
       payload: error.message,

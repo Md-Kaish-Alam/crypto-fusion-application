@@ -2,7 +2,6 @@ package com.nuwaish.crypto_fusion.service.impl;
 
 import com.nuwaish.crypto_fusion.modal.*;
 import com.nuwaish.crypto_fusion.repository.WatchListRepository;
-import com.nuwaish.crypto_fusion.service.WalletService;
 import com.nuwaish.crypto_fusion.service.WatchListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +52,20 @@ public class WatchListServiceImpl implements WatchListService {
         }
 
         watchListRepository.save(watchList);
+
+        return coin;
+    }
+
+    @Override
+    public Coin removeItemFromWatchList(Coin coin, User user) throws Exception {
+        WatchList watchList = findUserWatchList(user.getId());
+
+        if (watchList.getCoin().contains(coin)) {
+            watchList.getCoin().remove(coin);
+            watchListRepository.save(watchList);
+        } else {
+            throw new Exception("Coin not found in the watchlist!");
+        }
 
         return coin;
     }

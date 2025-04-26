@@ -88,4 +88,22 @@ public class WatchListController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PatchMapping("/remove/coin/{coinId}")
+    public ResponseEntity<ApiResponse<Coin>> removeItemFromWatchList(
+            @RequestHeader("Authorization") String jwt,
+            @PathVariable String coinId) throws Exception {
+
+        User user = userService.findUserByJwt(jwt);
+        Coin coin = coinService.findCoinById(coinId);
+
+        Coin removedCoin = watchListService.removeItemFromWatchList(coin, user);
+
+        ApiResponse<Coin> response = new ApiResponse<>();
+        response.setData(removedCoin);
+        response.setMessage("Coin removed successfully from watch list.");
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
 }

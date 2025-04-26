@@ -93,18 +93,11 @@ const Home = () => {
               Top 50
             </Button>
             <Button
-              variant={category == "topGainers" ? "default" : "outline"}
-              onClick={() => setCategory("topGainers")}
+              variant={category == "topTrading" ? "default" : "outline"}
+              onClick={() => setCategory("topTrading")}
               className="rounded-full"
             >
-              Top Gainers
-            </Button>
-            <Button
-              variant={category == "topLosers" ? "default" : "outline"}
-              onClick={() => setCategory("topLosers")}
-              className="rounded-full"
-            >
-              Top Losers
+              Top Trading
             </Button>
           </div>
           <AssetsTable

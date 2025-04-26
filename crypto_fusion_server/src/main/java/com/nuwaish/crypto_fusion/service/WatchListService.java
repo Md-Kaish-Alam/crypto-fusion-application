@@ -14,5 +14,5 @@ public interface WatchListService {
 
     Coin addItemToWatchList(Coin coin, User user) throws Exception;
 
-
+    Coin removeItemFromWatchList(Coin coin, User user) throws Exception;
 }

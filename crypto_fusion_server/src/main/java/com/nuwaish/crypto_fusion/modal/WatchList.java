@@ -17,6 +17,6 @@ public class WatchList {
     @OneToOne
     private User user;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Coin> coin = new ArrayList<>();
 }
