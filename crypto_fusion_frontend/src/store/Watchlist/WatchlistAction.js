@@ -38,7 +38,6 @@ export const addItemToWatchlist =
         payload: response.data.data,
       });
     } catch (error) {
-      console.log("error", error);
       dispatch({
         type: watchlistActionTypes.ADD_COIN_TO_WATCHLIST_FAILURE,
         error: error.message,

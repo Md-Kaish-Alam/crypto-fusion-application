@@ -7,23 +7,26 @@ import Home from "@/page/Home/Home";
 import Wallet from "@/page/Wallet/Wallet";
 import Navbar from "@/page/Navbar/Navbar";
 import Profile from "@/page/Profile/Profile";
+import { getUser } from "@/store/Auth/AuthAction";
 import SearchCoin from "@/page/Search/SearchCoin";
 import Portfolio from "@/page/Portfolio/Portfolio";
 import Watchlist from "@/page/Watchlist/Watchlist";
 import Acitivity from "@/page/Acitivity/Acitivity";
 import Withdrawal from "./page/Withdrawal/Withdrawal";
+import WithdrawalAdmin from "@/page/Admin/WithdrawalAdmin";
 import PageNotFound from "@/page/PageNotFound/PageNotFound";
 import StockDetails from "@/page/StockDetails/StockDetails";
 import PaymentDetails from "@/page/PaymentDetails/PaymentDetails";
-import { getUser } from "@/store/Auth/AuthAction";
 
 const App = () => {
-  const { auth } = useSelector((store) => store);
   const dispatch = useDispatch();
+
+  const { auth } = useSelector((store) => store);
 
   useEffect(() => {
     dispatch(getUser(auth.jwt || localStorage.getItem("jwt")));
   }, [auth.jwt, dispatch]);
+
   return (
     <>
       {auth.user ? (
@@ -40,6 +43,9 @@ const App = () => {
             <Route path="/withdrawal" element={<Withdrawal />} />
             <Route path="/market/:id" element={<StockDetails />} />
             <Route path="/payment-details" element={<PaymentDetails />} />
+            {auth.user?.role == "ROLE_ADMIN" && (
+              <Route element={<WithdrawalAdmin />} path="/admin/withdrawal" />
+            )}
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </>

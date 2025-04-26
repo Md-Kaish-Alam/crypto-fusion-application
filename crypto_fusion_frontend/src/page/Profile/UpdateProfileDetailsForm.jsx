@@ -64,7 +64,6 @@ const UpdateProfileDetailsForm = () => {
 
   const onSubmit = (data) => {
     dispatch(updateUserProfile(data, localStorage.getItem("jwt")));
-    console.log(data.dateOfBirth);
     form.reset();
   };
 

@@ -10,7 +10,6 @@ export const withdrawalRequest =
         headers: { Authorization: `Bearer ${jwt}` },
       });
 
-      console.log("withdrawal ---- ", response.data.data);
       dispatch({
         type: withdrawalActionTypes.WITHDRAWAL_SUCCESS,
         payload: response.data.data,
@@ -35,14 +34,11 @@ export const proceedWithdrawal =
           headers: { Authorization: `Bearer ${jwt}` },
         }
       );
-
-      console.log("procceed withdrawal ---- ", response.data);
       dispatch({
         type: withdrawalActionTypes.WITHDRAWAL_PROCEED_SUCCESS,
-        payload: response.data,
+        payload: response.data.data,
       });
     } catch (error) {
-      console.log(error);
       dispatch({
         type: withdrawalActionTypes.WITHDRAWAL_PROCEED_FAILURE,
         payload: error.message,
@@ -75,13 +71,11 @@ export const getAllWithdrawalRequest = (jwt) => async (dispatch) => {
       headers: { Authorization: `Bearer ${jwt}` },
     });
 
-    console.log("get withdrawal requests ---- ", response.data);
     dispatch({
       type: withdrawalActionTypes.GET_WITHDRAWAL_REQUEST_SUCCESS,
-      payload: response.data,
+      payload: response.data.data,
     });
   } catch (error) {
-    console.log("error ", error);
     dispatch({
       type: withdrawalActionTypes.GET_WITHDRAWAL_REQUEST_FAILURE,
       payload: error.message,

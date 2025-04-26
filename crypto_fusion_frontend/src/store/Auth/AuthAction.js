@@ -81,7 +81,6 @@ export const getUser = (token) => async (dispatch) => {
 // AuthAction.js
 export const updateUserProfile = (userData, token) => async (dispatch) => {
   dispatch({ type: authActionTypes.UPDATE_USER_REQUEST });
-  console.log({ token });
   try {
     const response = await axios.patch(
       `${API_BASE_URL}/api/users/profile/update-details`,

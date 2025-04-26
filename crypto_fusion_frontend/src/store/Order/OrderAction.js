@@ -18,9 +18,7 @@ export const payOrder =
         payload: response.data.data,
         amount,
       });
-      console.log("order success", response.data.data);
     } catch (error) {
-      console.log("error", error);
       dispatch({
         type: orderActionTypes.PAY_ORDER_FAILURE,
         error: error.message,

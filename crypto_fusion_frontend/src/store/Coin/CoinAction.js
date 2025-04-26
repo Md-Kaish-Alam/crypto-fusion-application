@@ -87,9 +87,7 @@ export const fetchCoinById = (coinId) => async (dispatch) => {
       type: coinActionTypes.FETCH_COIN_BY_ID_SUCCESS,
       payload: coinDetails,
     });
-    console.log("coin by id", coinDetails);
   } catch (error) {
-    console.log("error", error);
     dispatch({
       type: coinActionTypes.FETCH_COIN_BY_ID_FAILURE,
       payload: error.message,
@@ -113,7 +111,6 @@ export const fetchCoinDetails =
         payload: coinDetails,
       });
     } catch (error) {
-      console.log("error", error);
       dispatch({
         type: coinActionTypes.FETCH_COIN_DETAILS_FAILURE,
         payload: error.message,
