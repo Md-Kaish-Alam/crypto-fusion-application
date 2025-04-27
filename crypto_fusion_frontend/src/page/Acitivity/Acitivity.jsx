@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Loading from "@/components/Loading";
 import { calculateProfite, readableDate } from "@/lib/utils";
 import { getAllOrdersForUser } from "@/store/Order/OrderAction";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -21,6 +22,23 @@ const Acitivity = () => {
   useEffect(() => {
     dispatch(getAllOrdersForUser({ jwt: localStorage.getItem("jwt") }));
   }, [dispatch]);
+
+  if (order?.orders?.length === 0) {
+    return (
+      <div className="p-5 lg:p-12">
+        <h1 className="font-bold text-xl pb-5 text-muted-foreground">
+          Activity
+        </h1>
+        <p className="text-muted-foreground">No items found</p>
+      </div>
+    );
+  }
+
+  if (order?.loading) {
+    return (
+      <Loading />
+    )
+  }
 
   return (
     <div className="p-5 lg:p-12">

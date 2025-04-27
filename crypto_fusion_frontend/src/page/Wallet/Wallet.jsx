@@ -22,6 +22,7 @@ import {
   getUserWallet,
   getWalletTransactions,
 } from "@/store/Wallet/WalletAction";
+import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/CopyButton";
 import { generateStripePaymentId } from "@/lib/utils";
@@ -64,6 +65,10 @@ const Wallet = () => {
     dispatch(getUserWallet(localStorage.getItem("jwt")));
     dispatch(getWalletTransactions({ jwt: localStorage.getItem("jwt") }));
   }, [dispatch]);
+
+  if (wallet?.loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex flex-col items-center">
@@ -193,17 +198,13 @@ const Wallet = () => {
                 <div>
                   <p
                     className={`${
-                      ["ADD_AMOUNT", "SELL_ASSET"].includes(
-                        item.type
-                      )
+                      ["ADD_AMOUNT", "SELL_ASSET"].includes(item.type)
                         ? "text-green-500"
                         : "text-red-600"
                     }`}
                   >
                     $
-                    {["ADD_AMOUNT", "SELL_ASSET"].includes(
-                      item.type
-                    )
+                    {["ADD_AMOUNT", "SELL_ASSET"].includes(item.type)
                       ? " +"
                       : " -"}
                     {item.amount}

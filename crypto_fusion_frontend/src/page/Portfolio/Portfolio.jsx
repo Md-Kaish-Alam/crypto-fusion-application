@@ -1,4 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Table,
   TableBody,
@@ -7,10 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Loading from "@/components/Loading";
 import { getUserAssets } from "@/store/Asset/AssetAction";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Portfolio = () => {
   const navigate = useNavigate();
@@ -21,6 +22,21 @@ const Portfolio = () => {
   useEffect(() => {
     dispatch(getUserAssets(localStorage.getItem("jwt")));
   }, [dispatch]);
+
+  if (asset?.userAssets?.length === 0) {
+    return (
+      <div className="p-5 lg:p-12">
+        <h1 className="font-bold text-xl pb-5 text-muted-foreground">
+          Portfolio
+        </h1>
+        <p className="text-muted-foreground">No assets found</p>
+      </div>
+    );
+  }
+
+  if (asset?.loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="p-5 lg:p-12">

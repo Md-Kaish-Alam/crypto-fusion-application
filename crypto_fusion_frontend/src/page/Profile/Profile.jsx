@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Edit, ShieldAlert, VerifiedIcon } from "lucide-react";
 
+import Loading from "@/components/Loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +24,11 @@ const Profile = () => {
     // TODO: Add logic to enable two-step verification
     console.log("EnableTwoStepVerification");
   };
+
+  if (auth?.loading) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex flex-col items-center mb-5">
       <div className="pt-10 w-full lg:w-[60%] ">

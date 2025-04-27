@@ -17,6 +17,7 @@ import {
   fetchTradingCoinList,
   getTop50CoinList,
 } from "@/store/Coin/CoinAction";
+import Loading from "@/components/Loading";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import StockChart from "./StockChart";
@@ -71,6 +72,10 @@ const Home = () => {
   useEffect(() => {
     handleIsTyping();
   }, []);
+
+  if (coin.loading && coin.coinList.length == 0) {
+    return <Loading />;
+  }
 
   return (
     <div className="relative">

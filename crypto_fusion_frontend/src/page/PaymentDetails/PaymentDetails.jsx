@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { maskAccountNumber } from "@/lib/utils";
 import { CopyButton } from "@/components/CopyButton";
@@ -24,6 +25,10 @@ const PaymentDetails = () => {
   useEffect(() => {
     dispatch(getPaymentDetails({ jwt: localStorage.getItem("jwt") }));
   }, [dispatch]);
+
+  if (withdrawal?.loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="px-20">

@@ -15,6 +15,7 @@ import {
   getUserWatchlist,
   removeItemFromWatchlist,
 } from "@/store/Watchlist/WatchlistAction";
+import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -33,6 +34,21 @@ const Watchlist = () => {
       removeItemFromWatchlist({ jwt: localStorage.getItem("jwt"), coinId })
     );
   };
+
+  if (watchlist?.items?.length === 0) {
+    return (
+      <div className="p-5 lg:p-12">
+        <h1 className="font-bold text-xl pb-5 text-muted-foreground">
+          Watchlist
+        </h1>
+        <p className="text-muted-foreground">No items found</p>
+      </div>
+    );
+  }
+
+  if (watchlist?.loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="p-5 lg:p-12">

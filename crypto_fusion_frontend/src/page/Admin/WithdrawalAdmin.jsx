@@ -19,6 +19,7 @@ import {
   getAllWithdrawalRequest,
   proceedWithdrawal,
 } from "@/store/Withdrawal/WithdrawalAction";
+import Loading from "@/components/Loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { readableTimestamp } from "@/lib/utils";
@@ -37,6 +38,21 @@ const WithdrawalAdmin = () => {
       proceedWithdrawal({ jwt: localStorage.getItem("jwt"), id, accept })
     );
   };
+
+  if (withdrawal?.requests?.length === 0) {
+    return (
+      <div className="p-5 lg:p-12">
+        <h1 className="font-bold text-xl pb-5 text-muted-foreground">
+          Withdrawals
+        </h1>
+        <p className="text-muted-foreground">No withdrawals found.</p>
+      </div>
+    );
+  }
+
+  if (withdrawal?.loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="px-20 ">
@@ -70,9 +86,12 @@ const WithdrawalAdmin = () => {
                 <TableCell className="text-right">
                   <Badge
                     className={`text-white ${
-                      item.status == "PENDING" ? "bg-red-500 " : "bg-green-500"
-                    }
-                   `}
+                      item.status === "PENDING"
+                        ? "bg-yellow-500"
+                        : item.status === "DECLINED"
+                        ? "bg-red-500"
+                        : "bg-green-500"
+                    }`}
                   >
                     {item.status}
                   </Badge>

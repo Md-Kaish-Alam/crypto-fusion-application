@@ -15,6 +15,7 @@ import {
   getUserWatchlist,
   removeItemFromWatchlist,
 } from "@/store/Watchlist/WatchlistAction";
+import Loading from "@/components/Loading";
 import { existInWatchlist } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { fetchCoinDetails } from "@/store/Coin/CoinAction";
@@ -55,6 +56,10 @@ const StockDetails = () => {
       );
     }
   };
+
+  if (coin?.loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="p-5 mt-5">

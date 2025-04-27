@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Loading from "@/components/Loading";
 import { readableTimestamp } from "@/lib/utils";
 import { getWithdrawalHistory } from "@/store/Withdrawal/WithdrawalAction";
 
@@ -23,6 +24,21 @@ const Withdrawal = () => {
       dispatch(getWithdrawalHistory(jwt));
     }
   }, [dispatch]);
+
+  if (withdrawal?.history?.length === 0) {
+    return (
+      <div className="p-5 lg:p-12">
+        <h1 className="font-bold text-xl pb-5 text-muted-foreground">
+          Withdrawals
+        </h1>
+        <p className="text-muted-foreground">No withdrawals found.</p>
+      </div>
+    );
+  }
+
+  if (withdrawal?.loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="p-5 lg:p-12">
@@ -50,7 +66,9 @@ const Withdrawal = () => {
               <TableCell className="text-right">
                 <Badge
                   className={`text-white ${
-                    withdrawal?.status == "PENDING"
+                    withdrawal.status === "PENDING"
+                      ? "bg-yellow-500"
+                      : withdrawal.status === "DECLINED"
                       ? "bg-red-500"
                       : "bg-green-500"
                   }`}

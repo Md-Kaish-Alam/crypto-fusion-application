@@ -105,5 +105,5 @@ public class WatchListController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
 }
