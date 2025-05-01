@@ -1,6 +1,7 @@
 package com.nuwaish.crypto_fusion.controller;
 
 import com.nuwaish.crypto_fusion.domain.VERIFICATION_TYPE;
+import com.nuwaish.crypto_fusion.exception.OtpMismatchException;
 import com.nuwaish.crypto_fusion.modal.ForgotPasswordToken;
 import com.nuwaish.crypto_fusion.modal.User;
 import com.nuwaish.crypto_fusion.modal.VerificationCode;
@@ -128,12 +129,13 @@ public class UserController {
         }
 
         if (request.getVerificationType().equals(VERIFICATION_TYPE.EMAIL)) {
-            emailService.sendVerificationOTPEmail(user.getEmail(), token.getOtp());
+            emailService.sendForgotPasswordOTPEmail(user.getEmail(), token.getOtp());
         }
 
         AuthResponse authResponse = new AuthResponse();
-        authResponse.setSession(token.getId());
-        ApiResponse<AuthResponse> response = new ApiResponse<>(authResponse,"Forgot Password OTP sent successfully!", HttpStatus.OK.value());
+        authResponse.setSession(String.valueOf(token.getId()));
+        ApiResponse<AuthResponse> response = new ApiResponse<>(
+                authResponse,"Forgot Password OTP sent successfully!", HttpStatus.OK.value());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -141,22 +143,24 @@ public class UserController {
     @PatchMapping("/auth/users/reset-password/verify-otp")
     public ResponseEntity<ApiResponse<String>> resetPassword(
             @RequestParam String id,
-            @RequestHeader("Authorization") String jwt,
             @RequestBody ResetPasswordRequest request) throws Exception {
 
-        ForgotPasswordToken forgotPasswordToken = forgotPasswordService.findTokenById(id);
+        UUID tokenId = UUID.fromString(id);
+        ForgotPasswordToken forgotPasswordToken = forgotPasswordService.findTokenById(tokenId);
 
-        boolean isVerified = forgotPasswordToken.getOtp().equals(request.getOtp());
-
-        if (isVerified) {
-            userService.updatePassword(forgotPasswordToken.getUser(), request.getPassword());
-
-            ApiResponse<String> response = new ApiResponse<>();
-            response.setMessage("Password Updated Successfully!");
-
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        if (!forgotPasswordToken.getOtp().equals(request.getOtp())) {
+            throw new OtpMismatchException("OTP does not match.");
         }
-        
-        throw new Exception("Wrong OTP");
+
+        userService.updatePassword(forgotPasswordToken.getUser(), request.getPassword());
+
+        // Delete the used token
+        forgotPasswordService.deleteToken(forgotPasswordToken);
+
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setMessage("Password Updated Successfully!");
+        response.setStatusCode(HttpStatus.ACCEPTED.value());
+
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 }

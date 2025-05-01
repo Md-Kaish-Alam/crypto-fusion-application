@@ -5,6 +5,8 @@ import com.nuwaish.crypto_fusion.domain.VERIFICATION_TYPE;
 import com.nuwaish.crypto_fusion.modal.ForgotPasswordToken;
 import com.nuwaish.crypto_fusion.modal.User;
 
+import java.util.UUID;
+
 public interface ForgotPasswordService {
 
     ForgotPasswordToken createToken(User user,
@@ -13,7 +15,7 @@ public interface ForgotPasswordService {
                                     VERIFICATION_TYPE verificationType,
                                     String sendTo);
 
-    ForgotPasswordToken findTokenById(String id);
+    ForgotPasswordToken findTokenById(UUID id);
 
     ForgotPasswordToken findTokenByUser(Long userId);
 

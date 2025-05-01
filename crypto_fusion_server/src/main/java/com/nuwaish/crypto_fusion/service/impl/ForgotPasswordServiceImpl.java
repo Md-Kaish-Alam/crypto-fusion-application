@@ -1,6 +1,7 @@
 package com.nuwaish.crypto_fusion.service.impl;
 
 import com.nuwaish.crypto_fusion.domain.VERIFICATION_TYPE;
+import com.nuwaish.crypto_fusion.exception.InvalidTokenException;
 import com.nuwaish.crypto_fusion.modal.ForgotPasswordToken;
 import com.nuwaish.crypto_fusion.modal.User;
 import com.nuwaish.crypto_fusion.repository.ForgotPasswordRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ForgotPasswordServiceImpl implements ForgotPasswordService {
@@ -27,16 +29,16 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
         token.setUser(user);
         token.setSendTo(sendTo);
         token.setVerificationType(verificationType);
-        token.setId(id);
+        token.setId(UUID.fromString(id));
         token.setOtp(otp);
 
         return forgotPasswordRepository.save(token);
     }
 
     @Override
-    public ForgotPasswordToken findTokenById(String id) {
-        Optional<ForgotPasswordToken> token = forgotPasswordRepository.findById(id);
-        return token.orElse(null);
+    public ForgotPasswordToken findTokenById(UUID id) {
+        return forgotPasswordRepository.findById(id)
+                .orElseThrow(() -> new InvalidTokenException("Invalid or expired token."));
     }
 
     @Override
