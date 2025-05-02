@@ -15,6 +15,7 @@ import {
   getUserWatchlist,
   removeItemFromWatchlist,
 } from "@/store/Watchlist/WatchlistAction";
+import { toast } from "@/hooks/use-toast";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -33,6 +34,10 @@ const Watchlist = () => {
     dispatch(
       removeItemFromWatchlist({ jwt: localStorage.getItem("jwt"), coinId })
     );
+    toast({
+      title: "Asset removed from watchlist",
+      duration: 3000,
+    });
   };
 
   if (watchlist?.items?.length === 0) {

@@ -15,6 +15,7 @@ import {
   getUserWatchlist,
   removeItemFromWatchlist,
 } from "@/store/Watchlist/WatchlistAction";
+import { toast } from "@/hooks/use-toast";
 import Loading from "@/components/Loading";
 import { existInWatchlist } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,10 @@ const StockDetails = () => {
           coinId: coin.coinDetails?.id,
         })
       );
+      toast({
+        title: "Asset removed from watchlist",
+        duration: 3000,
+      });
     } else {
       dispatch(
         addItemToWatchlist({
@@ -54,6 +59,10 @@ const StockDetails = () => {
           coinId: coin.coinDetails?.id,
         })
       );
+      toast({
+        title: "Asset added to watchlist",
+        duration: 3000,
+      });
     }
   };
 

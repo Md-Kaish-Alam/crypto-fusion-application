@@ -19,6 +19,7 @@ import {
   getAllWithdrawalRequest,
   proceedWithdrawal,
 } from "@/store/Withdrawal/WithdrawalAction";
+import { toast } from "@/hooks/use-toast";
 import Loading from "@/components/Loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,13 @@ const WithdrawalAdmin = () => {
     dispatch(
       proceedWithdrawal({ jwt: localStorage.getItem("jwt"), id, accept })
     );
+    toast({
+      title: accept ? "Withdrawal Accepted" : "Withdrawal Declined",
+      description: `You have successfully ${
+        accept ? "accepted" : "declined"
+      } the withdrawal request.`,
+      duration: 3000,
+    });
   };
 
   if (withdrawal?.requests?.length === 0) {

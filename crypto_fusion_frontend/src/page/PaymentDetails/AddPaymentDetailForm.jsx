@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
@@ -54,6 +55,10 @@ const AddPaymentDetailForm = () => {
           jwt: localStorage.getItem("jwt"),
         })
       );
+      toast({
+        title: "Payment details added successfully",
+        duration: 3000,
+      })
     }
 
     form.reset();

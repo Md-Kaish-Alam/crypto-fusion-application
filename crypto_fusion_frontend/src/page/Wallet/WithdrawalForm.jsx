@@ -2,14 +2,15 @@ import { Landmark } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { maskAccountNumber } from "@/lib/utils";
-import { DialogClose } from "@/components/ui/dialog";
+import { toast } from "@/hooks/use-toast";
 import {
   getPaymentDetails,
   withdrawalRequest,
 } from "@/store/Withdrawal/WithdrawalAction";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { maskAccountNumber } from "@/lib/utils";
+import { DialogClose } from "@/components/ui/dialog";
 
 const WithdrawalForm = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,11 @@ const WithdrawalForm = () => {
       return;
     } else {
       dispatch(withdrawalRequest({ amount, jwt: localStorage.getItem("jwt") }));
+      toast({
+        title: "Withdrawal Request Sent",
+        description: `You have requested to withdraw $${amount}.`,
+        duration: 3000,
+      });
     }
     setAmount("");
   };

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Dialog,
@@ -9,6 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { Edit, ShieldAlert, VerifiedIcon } from "lucide-react";
 
+import {
+  enableTwoStepAuthentication,
+  getUser,
+  verifyOtp,
+} from "@/store/Auth/AuthAction";
+import { toast } from "@/hooks/use-toast";
 import Loading from "@/components/Loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,12 +23,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import AccountVerificationForm from "./AccountVerificationForm";
 import UpdateProfileDetailsForm from "./UpdateProfileDetailsForm";
-import {
-  enableTwoStepAuthentication,
-  getUser,
-  verifyOtp,
-} from "@/store/Auth/AuthAction";
-import { useEffect } from "react";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -29,13 +30,17 @@ const Profile = () => {
   const { auth } = useSelector((store) => store);
 
   const handleEnableTwoStepVerification = (otp) => {
-    console.log("otp", otp);
     dispatch(
       enableTwoStepAuthentication({
         jwt: localStorage.getItem("jwt"),
         otp,
       })
     );
+    toast({
+      title: "Two Step Verification Enabled",
+      description: "You have successfully enabled two step verification.",
+      duration: 3000,
+    });
   };
 
   const handleVerifyOtp = (otp) => {
@@ -45,6 +50,11 @@ const Profile = () => {
         otp,
       })
     );
+    toast({
+      title: "Account Verified",
+      description: "You have successfully verified your account.",
+      duration: 3000,
+    });
   };
 
   useEffect(() => {

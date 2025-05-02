@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { useState } from "react";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { CalendarIcon } from "lucide-react";
@@ -18,12 +19,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
 import { updateUserProfile } from "@/store/Auth/AuthAction";
-import { useState } from "react";
 
 // Validation schema for updating user details
 const updateUserValidationSchema = yup.object().shape({
@@ -64,6 +65,11 @@ const UpdateProfileDetailsForm = () => {
 
   const onSubmit = (data) => {
     dispatch(updateUserProfile(data, localStorage.getItem("jwt")));
+    toast({
+      title: "Profile Updated",
+      description: "Your profile has been updated successfully.",
+      duration: 3000,
+    });
     form.reset();
   };
 

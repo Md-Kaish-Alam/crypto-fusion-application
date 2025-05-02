@@ -38,7 +38,6 @@ export const login = (userData) => async (dispatch) => {
       userData.data
     );
     const user = response.data;
-    console.log("user", user.data.twoFactorAuthEnabled);
     if (user.data.twoFactorAuthEnabled) {
       userData.navigate(`/two-factor-auth/${user.data.session}`);
     }
@@ -155,9 +154,7 @@ export const sendVerificationOtp = ({ jwt, verificationType }) => {
         type: authActionTypes.SEND_VERIFICATION_OTP_SUCCESS,
         payload: user,
       });
-      console.log("send otp ", user);
     } catch (error) {
-      console.log("error ", error);
       const errorMessage = error.message;
       dispatch({
         type: authActionTypes.SEND_VERIFICATION_OTP_FAILURE,
@@ -168,7 +165,6 @@ export const sendVerificationOtp = ({ jwt, verificationType }) => {
 };
 
 export const verifyOtp = ({ jwt, otp }) => {
-  console.log("jwt", jwt);
   return async (dispatch) => {
     dispatch({ type: authActionTypes.VERIFY_OTP_REQUEST });
     try {
@@ -182,9 +178,7 @@ export const verifyOtp = ({ jwt, otp }) => {
       );
       const user = response.data;
       dispatch({ type: authActionTypes.VERIFY_OTP_SUCCESS, payload: user });
-      console.log("verify otp ", user);
     } catch (error) {
-      console.log("error ", error);
       const errorMessage = error.message;
       dispatch({
         type: authActionTypes.VERIFY_OTP_FAILURE,
@@ -212,9 +206,7 @@ export const enableTwoStepAuthentication = ({ jwt, otp }) => {
         type: authActionTypes.ENABLE_TWO_STEP_AUTHENTICATION_SUCCESS,
         payload: user,
       });
-      console.log("enable two step authentication ", user);
     } catch (error) {
-      console.log("error ", error);
       const errorMessage = error.message;
       dispatch({
         type: authActionTypes.ENABLE_TWO_STEP_AUTHENTICATION_FAILURE,
@@ -229,7 +221,6 @@ export const sendResetPassowrdOTP = ({
   verificationType,
   navigate,
 }) => {
-  console.log("send otp ", sendTo);
   return async (dispatch) => {
     dispatch({ type: authActionTypes.SEND_RESET_PASSWORD_OTP_REQUEST });
     try {
@@ -246,9 +237,7 @@ export const sendResetPassowrdOTP = ({
         type: authActionTypes.SEND_RESET_PASSWORD_OTP_SUCCESS,
         payload: user,
       });
-      console.log("otp sent successfully ", user);
     } catch (error) {
-      console.log("error ", error);
       const errorMessage = error.message;
       dispatch({
         type: authActionTypes.SEND_RESET_PASSWORD_OTP_FAILURE,
@@ -285,9 +274,7 @@ export const verifyResetPassowrdOTP = ({
         payload: user,
       });
       navigate("/password-update-successfully");
-      console.log("VERIFY otp successfully ", user);
     } catch (error) {
-      console.log("error ", error);
       const errorMessage = error.message;
       dispatch({
         type: authActionTypes.VERIFY_RESET_PASSWORD_OTP_FAILURE,

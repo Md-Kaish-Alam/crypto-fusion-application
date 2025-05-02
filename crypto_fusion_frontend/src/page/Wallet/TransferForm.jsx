@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import { transferMoney } from "@/store/Wallet/WalletAction";
+import { toast } from "@/hooks/use-toast";
 
 const TransferForm = () => {
   const dispatch = useDispatch();
@@ -52,6 +53,10 @@ const TransferForm = () => {
         },
       })
     );
+    toast({
+      title: "Amount Transferred Successfully!.",
+      duration: 3000,
+    });
 
     setFormData({ amount: "", wallet_id: "", purpose: "" });
   };

@@ -17,6 +17,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { sendVerificationOtp } from "@/store/Auth/AuthAction";
 
@@ -33,6 +34,11 @@ const AccountVerificationForm = ({ handleSubmit }) => {
         jwt: localStorage.getItem("jwt"),
       })
     );
+    toast({
+      title: "OTP Sent",
+      description: `We have sent OTP to your registered ${verificationType}`,
+      duration: 3000,
+    });
   };
 
   return (

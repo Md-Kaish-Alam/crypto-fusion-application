@@ -22,7 +22,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.2.0",
-    "@radix-ui/react-toast": "^1.1.5",
+    "@radix-ui/react-toast": "^1.2.11",
     "apexcharts": "^4.5.0",
     "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",

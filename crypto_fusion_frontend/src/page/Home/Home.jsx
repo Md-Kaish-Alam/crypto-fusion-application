@@ -56,7 +56,6 @@ const Home = () => {
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      console.log(inputValue);
       setInputValue("");
     }
   };

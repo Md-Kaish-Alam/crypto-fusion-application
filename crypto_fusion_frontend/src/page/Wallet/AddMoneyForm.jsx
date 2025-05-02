@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dot } from "lucide-react";
 import { useDispatch } from "react-redux";
 
+import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,10 @@ const AddMoneyForm = () => {
         amount,
       })
     );
+    toast({
+      title: "Amount Added to Wallet",
+      duration: 3000,
+    });
     setAmount("");
     setPaymentMethod("RAZORPAY");
   };
