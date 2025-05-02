@@ -1,4 +1,6 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   Dialog,
@@ -16,23 +18,32 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
+import { sendVerificationOtp } from "@/store/Auth/AuthAction";
 
-const AccountVerificationForm = () => {
+const AccountVerificationForm = ({ handleSubmit }) => {
+  const dispatch = useDispatch();
+
+  const { auth } = useSelector((state) => state);
   const [otpValue, setOtpValue] = useState();
-  
-  const handleSubmit = () => {
-    // TODO: Send OTP to the entered email address
-    console.log("OTP submitted: ", otpValue);
+
+  const handleSendOtp = (verificationType) => {
+    dispatch(
+      sendVerificationOtp({
+        verificationType,
+        jwt: localStorage.getItem("jwt"),
+      })
+    );
   };
+
   return (
     <div className="flex justify-center">
       <div className="space-y-5 mt-2 w-full">
         <div className="flex justify-between items-center">
           <p>Email :</p>
-          <p>alamkaishg1511@gmail.com</p>
+          <p>{auth.user?.email}</p>
           <Dialog>
             <DialogTrigger>
-              <Button>Send OTP</Button>
+              <Button onClick={() => handleSendOtp("EMAIL")}>Send OTP</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -60,9 +71,7 @@ const AccountVerificationForm = () => {
                   </InputOTPGroup>
                 </InputOTP>
                 <DialogClose>
-                  <Button onClick={handleSubmit}>
-                    Submit
-                  </Button>
+                  <Button onClick={() => handleSubmit(otpValue)}>Submit</Button>
                 </DialogClose>
               </div>
             </DialogContent>
@@ -71,6 +80,10 @@ const AccountVerificationForm = () => {
       </div>
     </div>
   );
+};
+
+AccountVerificationForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
 };
 
 export default AccountVerificationForm;

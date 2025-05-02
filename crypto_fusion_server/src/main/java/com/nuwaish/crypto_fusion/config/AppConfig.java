@@ -1,6 +1,7 @@
 package com.nuwaish.crypto_fusion.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,10 +34,10 @@ public class AppConfig {
     private CorsConfigurationSource corsConfigurationSource() {
         return new CorsConfigurationSource() {
             @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+            public CorsConfiguration getCorsConfiguration(@NotNull HttpServletRequest request) {
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
                 corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
-                corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
+                corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                 corsConfiguration.setAllowCredentials(true);
                 corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
                 corsConfiguration.setExposedHeaders(List.of("Authorization"));

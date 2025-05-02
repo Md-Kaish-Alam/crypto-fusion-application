@@ -12,11 +12,14 @@ import SearchCoin from "@/page/Search/SearchCoin";
 import Portfolio from "@/page/Portfolio/Portfolio";
 import Watchlist from "@/page/Watchlist/Watchlist";
 import Acitivity from "@/page/Acitivity/Acitivity";
+import TwoFactorAuth from "@/page/Auth/TwoFactorAuth";
 import Withdrawal from "./page/Withdrawal/Withdrawal";
 import WithdrawalAdmin from "@/page/Admin/WithdrawalAdmin";
 import PageNotFound from "@/page/PageNotFound/PageNotFound";
 import StockDetails from "@/page/StockDetails/StockDetails";
 import PaymentDetails from "@/page/PaymentDetails/PaymentDetails";
+import ResetPasswordForm from "@/page/Auth/ForgotPassword/ResetPasswordForm";
+import PasswordUpdateSuccess from "@/page/Auth/ForgotPassword/PasswordUpdateSuccess";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -50,7 +53,27 @@ const App = () => {
           </Routes>
         </>
       ) : (
-        <Auth />
+        <>
+          <Routes>
+            <Route element={<Auth />} path="/" />
+            <Route element={<Auth />} path="/signup" />
+            <Route element={<Auth />} path="/signin" />
+            <Route element={<Auth />} path="/forgot-password" />
+            <Route
+              element={<ResetPasswordForm />}
+              path="/reset-password/:session"
+            />
+            <Route
+              element={<PasswordUpdateSuccess />}
+              path="/password-update-successfully"
+            />
+            <Route
+              element={<TwoFactorAuth />}
+              path="/two-factor-auth/:session"
+            />
+            <Route element={<PageNotFound />} path="*" />
+          </Routes>
+        </>
       )}
     </>
   );

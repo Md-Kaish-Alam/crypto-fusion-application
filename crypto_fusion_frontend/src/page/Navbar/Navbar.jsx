@@ -31,7 +31,7 @@ const Navbar = () => {
   const { auth } = useSelector((store) => store);
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout(navigate));
   };
 
   return (

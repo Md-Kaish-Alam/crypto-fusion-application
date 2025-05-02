@@ -71,7 +71,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout(navigate));
   };
   return (
     <div className="mt-2 space-y-5">

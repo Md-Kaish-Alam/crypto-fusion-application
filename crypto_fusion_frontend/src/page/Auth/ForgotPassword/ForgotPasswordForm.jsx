@@ -11,6 +11,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { sendResetPassowrdOTP } from "@/store/Auth/AuthAction";
 
 // Validation schema using Yup
 const validationSchema = yup.object().shape({
@@ -21,6 +25,11 @@ const validationSchema = yup.object().shape({
 });
 
 const ForgotPasswordForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [verificationType, setVerificationType] = useState("EMAIL");
+
   const form = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
@@ -29,9 +38,16 @@ const ForgotPasswordForm = () => {
   });
 
   const onSubmit = (data) => {
-    // TODO: handle form submission
-    console.log({ data });
+    data.navigate = navigate;
+    dispatch(
+      sendResetPassowrdOTP({
+        sendTo: data.email,
+        navigate,
+        verificationType,
+      })
+    );
     form.reset();
+    setVerificationType("EMAIL");
   };
 
   return (
