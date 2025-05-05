@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const LOCALHOST = "http://localhost:8088";
-
-export const API_BASE_URL = LOCALHOST;
+export const API_BASE_URL =
+  import.meta.env.MODE === "production"
+    ? import.meta.env.VITE_API_URL_PRODUCTION
+    : import.meta.env.VITE_API_URL_DEVELOPMENT;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
