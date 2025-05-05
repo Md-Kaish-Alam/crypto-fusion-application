@@ -36,7 +36,12 @@ public class AppConfig {
             @Override
             public CorsConfiguration getCorsConfiguration(@NotNull HttpServletRequest request) {
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
-                corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
+                corsConfiguration.setAllowedOrigins(List.of(
+                        "http://localhost:5173",
+                        "https://crypto-fusion-application.vercel.app/",
+                        "https://crypto-fusion-application-mdkaishalams-projects.vercel.app/",
+                        "https://crypto-fusion-application-git-main-mdkaishalams-projects.vercel.app/"
+                ));
                 corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                 corsConfiguration.setAllowCredentials(true);
                 corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
